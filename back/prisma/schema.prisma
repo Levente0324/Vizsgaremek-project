@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Car {
+  id                Int     @id @default(autoincrement())
+  manufacturer      String
+  model             String
+  type              String
+  numberOfSeats     Int     @map("number_of_seats")
+  numberOfSuitcases Int     @map("number_of_suitcases")
+  fuelType          String  @map("fuel_type")
+  clutchType        String  @map("clutch_type")
+  priceForOneDay    Float   @map("price_for_one_day")
+  isAvailable       Boolean @map("is_available")
+  booking Booking?
+
+  @@map("cars")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  isAdmin   Boolean @default(false)
+  bookings  Booking[]
+  tokens Token[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  carId     Int       @unique
+  userId    Int
+  startDate DateTime
+  endDate   DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  car       Car      @relation(fields: [carId], references: [id])
+  @@map("bookings") 
+}
+
+model Token {
+  token String @id
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+}
