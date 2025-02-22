@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import * as argon2 from 'argon2';
 const prisma = new PrismaClient();
 
 async function seedCars() {
@@ -411,7 +412,7 @@ async function main() {
   const user1 = await prisma.user.create({
     data: {
       email: faker.internet.email(),
-      password: 'password123',
+      password: await argon2.hash('adminpass'),
       isAdmin: true,
     },
   });
@@ -419,7 +420,7 @@ async function main() {
   const user2 = await prisma.user.create({
     data: {
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: await argon2.hash('userpass'),
       isAdmin: false,
     },
   });

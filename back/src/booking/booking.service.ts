@@ -14,7 +14,11 @@ export class BookingsService {
   }
 
   findAll() {
-    return this.db.booking.findMany();
+    return this.db.booking.findMany({
+      include: {
+        car: true,
+      },
+    });
   }
 
   findOne(id: number) {

@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { BookingsService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('bookings')
 @Controller('bookings')
@@ -17,6 +27,7 @@ export class BookingsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('bearer')) // Add auth guard
   @ApiOperation({ summary: 'Foglalások listázása' })
   @ApiResponse({ status: 200, description: 'Foglalások listája.' })
   findAll() {
@@ -38,6 +49,7 @@ export class BookingsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('bearer')) // Add auth guard
   @ApiOperation({ summary: 'Foglalás törlése' })
   @ApiResponse({ status: 200, description: 'Foglalás sikeresen törölve.' })
   remove(@Param('id') id: string) {

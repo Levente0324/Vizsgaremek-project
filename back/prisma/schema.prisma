@@ -50,7 +50,8 @@ model Booking {
 }
 
 model Token {
-  token String @id
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
+  id      Int     @id @default(autoincrement())
+  token   String  @unique
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
 }

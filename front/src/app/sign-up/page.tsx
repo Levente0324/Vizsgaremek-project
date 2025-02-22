@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from "@/components/navbar";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -41,12 +40,33 @@ export default function SignUpPage() {
   };
 
   return (
-    <>
-      <div className="mb-2">
-        <Navbar />
+    <div className="flex flex-col justify-center items-center">
+      <div className="mt-6 w-[800px]">
+        <div className="flex justify-start px-4 py-2">
+          <a
+            href="/"
+            className="flex items-center text-[#AA4D2B] hover:text-[#943f21]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-5 h-5 mr-1"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+              />
+            </svg>
+            Back to Home
+          </a>
+        </div>
       </div>
       <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col justify-center items-center w-[800px] h-auto bg-white rounded-3xl -mt-20 py-8 px-6 border-2">
+        <div className="flex flex-col justify-center items-center w-[800px] h-auto bg-white rounded-3xl py-8 px-6 border-2 mt-20">
           <h2 className="text-5xl text-black font-bold mb-8">Sign Up</h2>
 
           {error && (
@@ -128,6 +148,6 @@ export default function SignUpPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

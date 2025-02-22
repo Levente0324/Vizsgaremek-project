@@ -1,3 +1,5 @@
+import { useRouter } from "next/navigation";
+
 interface CarType {
   id: number;
   manufacturer: string;
@@ -12,8 +14,13 @@ interface CarType {
 }
 
 const Car = ({ car }: { car: CarType }) => {
+  const router = useRouter();
+
   return (
-    <div className="m-4 p-6 w-[300px] bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+    <div
+      onClick={() => router.push(`/cars/${car.id}`)}
+      className="m-4 p-6 w-[300px] bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+    >
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold text-gray-800">
           {car.manufacturer} {car.model}

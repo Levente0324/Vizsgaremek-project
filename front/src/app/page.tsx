@@ -4,6 +4,7 @@ import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
 import Search from "@/components/search";
 import Car from "@/components/car";
+import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
 interface CarType {
@@ -87,6 +88,13 @@ export default function Home() {
         ) : (
           visibleCars.map((car) => <Car key={car.id} car={car} />)
         )}
+      </div>
+      <div className="flex justify-center items-center mt-4">
+        <Link href="/cars">
+          <button className="w-36 h-12 text-lg bg-[#AA4D2B] text-white px-4 py-2 rounded-xl hover:bg-[#943f21] transition-colors">
+            Show all cars
+          </button>
+        </Link>
       </div>
     </>
   );
