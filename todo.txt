@@ -1,16 +1,14 @@
-search responsive
-search mukodjon
-szurok (all cars)
+✅ search responsive
+✅ search mukodjon
+✅ szurok (all cars)
 ✅ fizetes elott opciok (biztositas, babaules, stb.)
 ✅ fizetesnel adatok megadasa
-about us page / Faq
+✅ Faq
 ✅ reviews (maga az oldalhoz)
+about us page 
 
 
 // bonusz
 ✅ eur - huf (penznem valaszto)  
-
-
 Detailed car images/gallery for each car
-Integration with Google Maps to show pickup locations
-Email notifications for bookings/confirmations
+✅ Email notifications for bookings/confirmations

@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import Search from "@/components/search";
 import Car from "@/components/car";
 import Reviews from "@/components/reviews";
+import Faq from "@/components/faq";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
@@ -101,8 +102,11 @@ export default function Home() {
           </button>
         </Link>
       </div>
-      <div className="mb-12 px-16">
+      <div className="mb-6 px-16">
         <Reviews />
+      </div>
+      <div>
+        <Faq />
       </div>
     </>
   );
