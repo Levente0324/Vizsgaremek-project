@@ -1,19 +1,38 @@
-import { IsInt, IsDateString, IsNotEmpty } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsDateString,
+  IsArray,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateBookingDto {
-  @IsInt()
+  @IsNumber()
   @IsNotEmpty()
-  carId: number;  // Jármű ID
+  carId: number;
 
-  @IsInt()
+  @IsNumber()
   @IsNotEmpty()
-  userId: number;  // Felhasználó ID
-
-  @IsDateString()
-  @IsNotEmpty()
-  startDate: string;  // Kezdő dátum
+  userId: number;
 
   @IsDateString()
   @IsNotEmpty()
-  endDate: string;  // Befejező dátum
+  startDate: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  endDate: string;
+
+  @IsString()
+  @IsOptional()
+  protectionType?: string;
+
+  @IsArray()
+  @IsOptional()
+  extras?: string[];
+
+  @IsNumber()
+  @IsNotEmpty()
+  totalPrice: number;
 }

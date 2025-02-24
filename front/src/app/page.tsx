@@ -4,6 +4,7 @@ import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
 import Search from "@/components/search";
 import Car from "@/components/car";
+import Reviews from "@/components/reviews";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
@@ -69,25 +70,29 @@ export default function Home() {
 
   return (
     <>
-      <div className="mb-2">
+      <div className="mb-2 px-4 md:px-0">
         <Navbar />
       </div>
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center px-4 md:px-0">
         <Hero />
         <Search />
       </div>
-      <div className="flex flex-col justify-center items-center mt-10">
-        <h1 className="text-5xl text-black font-bold">Kiemelt ajanlatok</h1>
-      </div>
-      <div
-        ref={containerRef}
-        className="flex flex-wrap justify-center items-center mt-5 w-full h-full"
-      >
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          visibleCars.map((car) => <Car key={car.id} car={car} />)
-        )}
+      <div className="flex flex-col justify-center items-center mt-10 pb-8 md:px-0 bg-[#1C1F20] rounded-3xl">
+        <div className="flex flex-col justify-center items-center mt-10 px-4 md:px-0">
+          <h1 className="text-3xl md:text-5xl text-white font-bold text-center">
+            Recommended picks
+          </h1>
+        </div>
+        <div
+          ref={containerRef}
+          className="flex flex-wrap justify-center items-center mt-5 w-full h-full px-4 md:px-0"
+        >
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            visibleCars.map((car) => <Car key={car.id} car={car} />)
+          )}
+        </div>
       </div>
       <div className="flex justify-center items-center mt-4">
         <Link href="/cars">
@@ -95,6 +100,9 @@ export default function Home() {
             Show all cars
           </button>
         </Link>
+      </div>
+      <div className="mb-12 px-16">
+        <Reviews />
       </div>
     </>
   );

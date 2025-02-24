@@ -9,7 +9,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        custom: ["Madimi One"],
+        custom: ["Dangrek"],
       },
     },
   },

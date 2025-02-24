@@ -39,12 +39,14 @@ export default function CarsPage() {
 
   return (
     <>
-      <div className="mb-2">
+      <div className="mb-2 px-4 md:px-0">
         <Navbar />
       </div>
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col justify-center items-center mt-10 mb-10">
-          <h1 className="text-5xl text-black font-bold">All Cars</h1>
+      <div className="flex flex-col justify-center items-center px-4 md:px-0">
+        <div className="flex flex-col justify-center items-center mt-8 mb-4">
+          <h1 className="text-3xl md:text-6xl text-[#1C1F20] font-bold text-center">
+            All Cars
+          </h1>
         </div>
         <div className="flex flex-wrap justify-center items-center gap-4 w-full max-w-[1600px] px-4">
           {loading ? (

@@ -1,5 +1,106 @@
-@import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dangrek&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media (max-width: 768px) {
+  body {
+    padding: 0 16px;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .hero {
+    height: 300px !important;
+  }
+
+  .text-8xl {
+    font-size: 4rem !important;
+  }
+
+  .text-5xl {
+    font-size: 2rem !important;
+  }
+
+  .text-3xl {
+    font-size: 1.5rem !important;
+  }
+
+  .w-500 {
+    width: 100% !important;
+  }
+
+  .w-300 {
+    width: 90% !important;
+  }
+
+  .px-24 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .mr-24 {
+    margin-right: 1rem !important;
+  }
+
+  .space-x-2 {
+    gap: 0.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .w-36 {
+    width: 100% !important;
+    max-width: 300px;
+  }
+
+  .w-\[800px\] {
+    width: 100% !important;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .flex-row {
+    flex-direction: column !important;
+  }
+
+  .items-center {
+    align-items: stretch !important;
+  }
+
+  .px-72 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .mt-20 {
+    margin-top: 2rem !important;
+  }
+
+  input[type="date"] {
+    width: 100% !important;
+  }
+
+  .rounded-3xl {
+    border-radius: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .p-8 {
+    padding: 1rem !important;
+  }
+
+  .text-4xl {
+    font-size: 1.875rem !important;
+  }
+
+  .space-y-6 {
+    margin-top: 1rem !important;
+  }
+}

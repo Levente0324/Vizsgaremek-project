@@ -406,8 +406,58 @@ async function seedCars() {
   });
 }
 
+async function seedExtras() {
+  const extras = [
+    {
+      name: 'GPS Navigation',
+      price: 2000,
+      description: 'Built-in GPS navigation system',
+    },
+    {
+      name: 'Child Seat',
+      price: 3000,
+      description: 'Safe and comfortable child seat',
+    },
+    {
+      name: 'Additional Driver',
+      price: 5000,
+      description: 'Register an additional driver',
+    },
+    {
+      name: 'Airport Pickup',
+      price: 8000,
+      description: 'Pickup service from airport',
+    },
+  ];
+
+  const protections = [
+    {
+      name: 'Basic',
+      price: 5000,
+      description: 'Basic coverage for minor damages',
+    },
+    {
+      name: 'Premium',
+      price: 8000,
+      description: 'Extended coverage including tire and glass',
+    },
+    {
+      name: 'Full',
+      price: 12000,
+      description: 'Complete coverage with zero deductible',
+    },
+  ];
+
+  for (const extra of extras) {
+    await prisma.extra.create({ data: extra });
+  }
+
+  console.log('Extras seeded');
+}
+
 async function main() {
   await seedCars();
+  await seedExtras();
 
   const user1 = await prisma.user.create({
     data: {
@@ -425,14 +475,36 @@ async function main() {
     },
   });
 
-  const booking = await prisma.booking.create({
-    data: {
-      startDate: faker.date.recent(),
-      endDate: faker.date.future(),
-      carId: faker.number.int({ min: 1, max: 36 }),
-      userId: user1.id,
+  const randomCar = await prisma.car.findFirst({
+    where: {
+      id: faker.number.int({ min: 1, max: 36 }),
     },
   });
+
+  if (randomCar) {
+    const startDate = faker.date.recent();
+    const endDate = faker.date.future();
+    const days = Math.ceil(
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    const booking = await prisma.booking.create({
+      data: {
+        startDate: startDate,
+        endDate: endDate,
+        carId: randomCar.id,
+        userId: user1.id,
+        totalPrice: randomCar.priceForOneDay * days, // Calculate total price based on days
+        protection: {
+          create: {
+            name: 'Basic',
+            price: 5000,
+            description: 'Basic coverage for minor damages',
+          },
+        },
+      },
+    });
+  }
 }
 
 main()

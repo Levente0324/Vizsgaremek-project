@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { formatPrice } from "@/utils/currency";
 
 interface CarType {
   id: number;
@@ -19,10 +20,10 @@ const Car = ({ car }: { car: CarType }) => {
   return (
     <div
       onClick={() => router.push(`/cars/${car.id}`)}
-      className="m-4 p-6 w-[300px] bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+      className="w-full md:w-[300px] m-4 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
     >
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold text-gray-800">
+        <h2 className="text-2xl font-bold text-[#1C1F20]">
           {car.manufacturer} {car.model}
         </h2>
         <div className="text-gray-600">
@@ -46,10 +47,10 @@ const Car = ({ car }: { car: CarType }) => {
             <span>Transmission:</span>
             <span className="font-medium">{car.clutchType}</span>
           </p>
-          <p className="flex justify-between mt-4 text-lg">
+          <p className="flex justify-between mt-4 text-xl text-[#1C1F20]">
             <span>Price per day:</span>
-            <span className="font-bold text-blue-600">
-              {car.priceForOneDay} Ft
+            <span className="font-bold text-[#AA4D2B]">
+              {formatPrice(car.priceForOneDay)}
             </span>
           </p>
         </div>

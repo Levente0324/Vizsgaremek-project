@@ -6,6 +6,8 @@ import Navbar from "@/components/navbar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { use } from "react";
+import { formatPrice } from "@/utils/currency";
+import BookingSteps from "@/components/booking-steps";
 
 interface Car {
   id: number;
@@ -20,19 +22,52 @@ interface Car {
   isAvailable: boolean;
 }
 
-export default function CarDetailPage({ params }: { params: { id: string } }) {
+interface BookingData {
+  protectionPackage: {
+    name: string;
+    price: number;
+    description: string;
+  } | null;
+  extras: Array<{
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+  }>;
+  paymentDetails: {
+    cardNumber: string;
+    cardHolder: string;
+    expiryDate: string;
+    cvv: string;
+  };
+  totalPrice: number;
+}
+
+export default function CarDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [error, setError] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
+  const [selectedProtection, setSelectedProtection] = useState<string | null>(
+    null
+  );
+  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
+  const [step, setStep] = useState(1);
+  const [showBookingSteps, setShowBookingSteps] = useState(false);
   const router = useRouter();
+  const resolvedParams = use(params);
+  const carId = resolvedParams.id;
 
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/cars/${params.id}`);
+        const response = await fetch(`http://localhost:3000/cars/${carId}`);
         if (!response.ok) {
           throw new Error("Car not found");
         }
@@ -47,7 +82,7 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
     };
 
     fetchCar();
-  }, [params.id]);
+  }, [carId]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -73,7 +108,7 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
     fetchUserProfile();
   }, []);
 
-  const handleBook = async () => {
+  const handleBook = () => {
     const token = localStorage.getItem("token");
     if (!token || !userId) {
       router.push("/sign-in");
@@ -85,7 +120,12 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
       return;
     }
 
+    setShowBookingSteps(true);
+  };
+
+  const handleBookingComplete = async (bookingData: BookingData) => {
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:3000/bookings", {
         method: "POST",
         headers: {
@@ -93,10 +133,13 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          carId: parseInt(params.id),
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString(),
+          carId: parseInt(carId),
           userId: userId,
+          startDate: startDate?.toISOString(),
+          endDate: endDate?.toISOString(),
+          protectionType: bookingData.protectionPackage?.name,
+          extras: bookingData.extras.map((e) => e.id),
+          totalPrice: bookingData.totalPrice,
         }),
       });
 
@@ -137,90 +180,126 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
     <>
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow p-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">
-            {car.manufacturer} {car.model}
-          </h1>
+        {showBookingSteps ? (
+          <BookingSteps
+            carPrice={car?.priceForOneDay || 0}
+            startDate={startDate!}
+            endDate={endDate!}
+            onComplete={handleBookingComplete}
+            onCancel={() => setShowBookingSteps(false)}
+          />
+        ) : (
+          <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow p-4 md:p-8">
+            <h1 className="text-3xl md:text-5xl font-bold text-[#1C1F20] mb-6">
+              {car.manufacturer} {car.model}
+            </h1>
 
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold text-gray-700">
-                Car Details
-              </h2>
-              <div className="space-y-2">
-                <p className="flex justify-between">
-                  <span className="font-medium">Type:</span>
-                  <span>{car.type}</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="font-medium">Seats:</span>
-                  <span>{car.numberOfSeats}</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="font-medium">Suitcases:</span>
-                  <span>{car.numberOfSuitcases}</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="font-medium">Fuel Type:</span>
-                  <span>{car.fuelType}</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="font-medium">Transmission:</span>
-                  <span>{car.clutchType}</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="font-medium">Price per day:</span>
-                  <span className="text-[#AA4D2B] font-bold">
-                    {car.priceForOneDay.toLocaleString()} Ft
-                  </span>
-                </p>
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {error}
               </div>
-            </div>
+            )}
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold text-gray-700">Book Now</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <div>
-                  <label className="block text-gray-700 mb-2">Start Date</label>
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    minDate={new Date()}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    placeholderText="Select start date"
-                  />
+                <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">
+                  Car Details
+                </h2>
+                <div className="space-y-2">
+                  <p className="flex justify-between">
+                    <span className="font-medium text-xl text-[#1C1F20]">
+                      Type:
+                    </span>
+                    <span className="text-lg text-[#1C1F20]">{car.type}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="font-medium text-xl text-[#1C1F20]">
+                      Seats:
+                    </span>
+                    <span className="text-lg text-[#1C1F20]">
+                      {car.numberOfSeats}
+                    </span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="font-medium text-xl text-[#1C1F20]">
+                      Suitcases:
+                    </span>
+                    <span className="text-lg text-[#1C1F20]">
+                      {car.numberOfSuitcases}
+                    </span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="font-medium text-xl text-[#1C1F20]">
+                      Fuel Type:
+                    </span>
+                    <span className="text-lg text-[#1C1F20]">
+                      {car.fuelType}
+                    </span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="font-medium text-xl text-[#1C1F20]">
+                      Transmission:
+                    </span>
+                    <span className="text-lg text-[#1C1F20]">
+                      {car.clutchType}
+                    </span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="font-medium text-2xl text-[#1C1F20]">
+                      Price per day:
+                    </span>
+                    <span className="text-[#AA4D2B] font-bold text-2xl">
+                      {car && formatPrice(car.priceForOneDay)}
+                    </span>
+                  </p>
                 </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">End Date</label>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    minDate={startDate || new Date()}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    placeholderText="Select end date"
-                  />
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">
+                  Book Now
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-text-[#1C1F20] text-xl mb-2">
+                      Start Date
+                    </label>
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
+                      minDate={new Date()}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                      placeholderText="Select start date"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-text-[#1C1F20] text-xl mb-2">
+                      End Date
+                    </label>
+                    <DatePicker
+                      selected={endDate}
+                      onChange={(date) => setEndDate(date)}
+                      minDate={startDate || new Date()}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                      placeholderText="Select end date"
+                    />
+                  </div>
+                  <button
+                    onClick={handleBook}
+                    disabled={!car.isAvailable}
+                    className={`w-full py-2.5 px-4 rounded-xl text-white font-medium text-lg ${
+                      car.isAvailable
+                        ? "bg-[#AA4D2B] hover:bg-[#943f21]"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    {car.isAvailable ? "Continue to Book" : "Not Available"}
+                  </button>
                 </div>
-                <button
-                  onClick={handleBook}
-                  disabled={!car.isAvailable}
-                  className={`w-full py-3 px-4 rounded-md text-white font-medium ${
-                    car.isAvailable
-                      ? "bg-[#AA4D2B] hover:bg-[#943f21]"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  {car.isAvailable ? "Book Now" : "Not Available"}
-                </button>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

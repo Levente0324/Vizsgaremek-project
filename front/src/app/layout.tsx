@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="px-72 py-2 bg-[#F1EFEA]">{children}</body>
+      <body className="px-4 md:px-72 py-2 bg-[#F1EFEA] font-custom">
+        {children}
+      </body>
     </html>
   );
 }

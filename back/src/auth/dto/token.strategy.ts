@@ -9,22 +9,18 @@ export class TokenStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  // A token validálása
   async validate(token: string) {
-    // Megkeressük a token-t az adatbázisban
     const tokenObj = await this.db.token.findUnique({
       where: { token },
       include: { user: true },
     });
 
-    // Ha nem találunk tokent, hibát dobunk
     if (!tokenObj) {
       throw new UnauthorizedException('Hibás token');
     }
 
-    // Visszaadjuk a kapcsolódó felhasználót
     const user = tokenObj.user;
-    delete user.password; // Ne adjuk vissza a jelszót
+    delete user.password;
     return user;
   }
 }

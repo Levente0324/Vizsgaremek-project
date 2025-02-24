@@ -7,10 +7,8 @@ import * as crypto from 'crypto';
 export class AuthService {
   constructor(private readonly db: PrismaService) {}
 
-  // Add this new method
   async validateToken(token: string) {
     try {
-      // Remove 'Bearer ' prefix if present
       const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
 
       const tokenRecord = await this.db.token.findUnique({
@@ -32,11 +30,9 @@ export class AuthService {
 
   // Registration
   async register(userData: { email: string; password: string }) {
-    // Hash the password
     const hashedPassword = await argon2.hash(userData.password);
 
     try {
-      // Create new user
       const user = await this.db.user.create({
         data: {
           email: userData.email,
@@ -44,19 +40,7 @@ export class AuthService {
         },
       });
 
-      // Generate token
-      const token = crypto.randomBytes(64).toString('hex');
-
-      // Save token
-      await this.db.token.create({
-        data: {
-          token,
-          userId: user.id,
-        },
-      });
-
-      delete user.password;
-      return { token, user }; // Now returning user object as well
+      return { user };
     } catch (error) {
       if (error.code === 'P2002') {
         throw new Error('Email already exists');
@@ -76,7 +60,6 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      // Verify password
       const isPasswordValid = await argon2.verify(
         user.password,
         loginData.password,
@@ -86,19 +69,18 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      // Generate new token
       const token = crypto.randomBytes(64).toString('hex');
 
-      // Save token
       await this.db.token.create({
         data: {
           token,
           userId: user.id,
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
         },
       });
 
       delete user.password;
-      return { token, user }; // Now returning user object as well
+      return { token, user };
     } catch (error) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -107,14 +89,12 @@ export class AuthService {
   // Logout
   async logout(token: string) {
     try {
-      // Remove 'Bearer ' prefix if present
       const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
 
       await this.db.token.delete({
         where: { token: tokenValue },
       });
     } catch (error) {
-      // Token might already be deleted or not exist
       console.error('Error deleting token:', error);
     }
   }
