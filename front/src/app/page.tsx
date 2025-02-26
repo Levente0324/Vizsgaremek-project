@@ -78,9 +78,9 @@ export default function Home() {
         <Hero />
         <Search />
       </div>
-      <div className="flex flex-col justify-center items-center mt-10 pb-8 md:px-0 bg-[#1C1F20] rounded-3xl">
+      <div className="flex flex-col justify-center items-center mt-10 pb-8 md:px-0 bg-[#1C1F20] rounded-[50px] shadow-2xl">
         <div className="flex flex-col justify-center items-center mt-10 px-4 md:px-0">
-          <h1 className="text-3xl md:text-5xl text-white font-bold text-center">
+          <h1 className="text-3xl md:text-5xl text-white font-bold text-center select-none">
             Recommended picks
           </h1>
         </div>
@@ -95,9 +95,9 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="flex justify-center items-center mt-4">
+      <div className="flex justify-center items-center mt-6 mb-14">
         <Link href="/cars">
-          <button className="w-36 h-12 text-lg bg-[#AA4D2B] text-white px-4 py-2 rounded-xl hover:bg-[#943f21] transition-colors">
+          <button className="w-44 h-14 text-xl bg-[#AA4D2B] text-white px-4 py-2 rounded-xl hover:bg-[#943f21] hover:ring-2 hover:ring-[#943f21] transition-all">
             Show all cars
           </button>
         </Link>

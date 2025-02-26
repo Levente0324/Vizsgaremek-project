@@ -18,9 +18,9 @@ const Search = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full md:w-[800px] h-32 bg-white rounded-3xl -mt-20 py-2 px-6 border-2">
+    <div className="flex flex-col justify-center items-center w-full md:w-[800px] h-32 bg-white rounded-3xl -mt-20 py-2 px-6 border-2 shadow-2xl">
       <div className="flex justify-center items-center w-full h-[72px]">
-        <h1 className="text-3xl text-[#1C1F20] font-bold -mt-5">
+        <h1 className="text-3xl text-[#1C1F20] font-bold -mt-5 select-none">
           Search for a car
         </h1>
       </div>
@@ -46,7 +46,7 @@ const Search = () => {
         />
         <button
           onClick={handleSearch}
-          className="bg-[#1C1F20] text-white rounded-xl border-2 p-0 h-[50px] w-[80px] flex justify-center items-center hover:bg-[#44484b]"
+          className="bg-[#1C1F20] text-white rounded-xl p-0 h-[50px] w-[80px] flex justify-center items-center hover:bg-[#44484b] hover:ring-1 hover:ring-[#44484b] transition-all"
         >
           <Image src="/search.png" width={20} height={20} alt="search" />
         </button>

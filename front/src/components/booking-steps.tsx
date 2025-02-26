@@ -86,6 +86,38 @@ const EXTRA_SERVICES: Extra[] = [
   },
 ];
 
+const formatCardNumber = (value: string): string => {
+  const numbers = value.replace(/\D/g, "");
+  return numbers.slice(0, 16);
+};
+
+const formatExpiryDate = (value: string): string => {
+  const numbers = value.replace(/\D/g, "");
+  if (numbers.length >= 2) {
+    return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}`;
+  }
+  return numbers;
+};
+
+const isValidName = (name: string): boolean => {
+  return /^[A-Za-z\s]{3,}$/.test(name);
+};
+
+const isValidExpiryDate = (date: string): boolean => {
+  if (!/^\d{2}\/\d{2}$/.test(date)) return false;
+
+  const [month, year] = date.split("/").map((num) => parseInt(num));
+  const currentYear = new Date().getFullYear() % 100;
+
+  return (
+    month >= 1 &&
+    month <= 12 &&
+    year >= 25 &&
+    (year > currentYear ||
+      (year === currentYear && month > new Date().getMonth() + 1))
+  );
+};
+
 export default function BookingSteps({
   carPrice,
   onComplete,
@@ -120,29 +152,31 @@ export default function BookingSteps({
   };
 
   const validateCard = () => {
-    const cardNumberValid =
-      paymentDetails.cardNumber.replace(/\s/g, "").length === 16;
-    const cvvValid = paymentDetails.cvv.length === 3;
-    const dateValid = /^\d{2}\/\d{2}$/.test(paymentDetails.expiryDate);
-    const nameValid = paymentDetails.cardHolder.length > 0;
-
-    if (!cardNumberValid) {
-      setError("Invalid card number");
-      return false;
-    }
-    if (!cvvValid) {
-      setError("Invalid CVV");
-      return false;
-    }
-    if (!dateValid) {
-      setError("Invalid expiry date");
-      return false;
-    }
-    if (!nameValid) {
-      setError("Please enter card holder name");
+    if (paymentDetails.cardNumber.length !== 16) {
+      setError("Card number must be 16 digits");
       return false;
     }
 
+    if (!isValidName(paymentDetails.cardHolder)) {
+      setError(
+        "Card holder name must be at least 3 letters and contain only letters and spaces"
+      );
+      return false;
+    }
+
+    if (paymentDetails.cvv.length !== 3) {
+      setError("CVV must be 3 digits");
+      return false;
+    }
+
+    if (!isValidExpiryDate(paymentDetails.expiryDate)) {
+      setError(
+        "Invalid expiry date. Must be MM/YY format and date must be in the future"
+      );
+      return false;
+    }
+
+    setError("");
     return true;
   };
 
@@ -307,10 +341,10 @@ export default function BookingSteps({
                 onChange={(e) =>
                   setPaymentDetails((prev) => ({
                     ...prev,
-                    cardNumber: e.target.value.replace(/\D/g, ""),
+                    cardNumber: formatCardNumber(e.target.value),
                   }))
                 }
-                placeholder="1234 5678 9012 3456"
+                placeholder="1234567890123456"
               />
             </div>
             <div>
@@ -324,7 +358,7 @@ export default function BookingSteps({
                 onChange={(e) =>
                   setPaymentDetails((prev) => ({
                     ...prev,
-                    cardHolder: e.target.value,
+                    cardHolder: e.target.value.replace(/[^A-Za-z\s]/g, ""),
                   }))
                 }
                 placeholder="John Doe"
@@ -339,12 +373,15 @@ export default function BookingSteps({
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AA4D2B]"
                   value={paymentDetails.expiryDate}
-                  onChange={(e) =>
-                    setPaymentDetails((prev) => ({
-                      ...prev,
-                      expiryDate: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => {
+                    const formatted = formatExpiryDate(e.target.value);
+                    if (formatted.length <= 5) {
+                      setPaymentDetails((prev) => ({
+                        ...prev,
+                        expiryDate: formatted,
+                      }));
+                    }
+                  }}
                   placeholder="MM/YY"
                   maxLength={5}
                 />
@@ -361,7 +398,7 @@ export default function BookingSteps({
                   onChange={(e) =>
                     setPaymentDetails((prev) => ({
                       ...prev,
-                      cvv: e.target.value.replace(/\D/g, ""),
+                      cvv: e.target.value.replace(/\D/g, "").slice(0, 3),
                     }))
                   }
                   placeholder="123"

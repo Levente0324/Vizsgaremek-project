@@ -20,7 +20,7 @@ const Car = ({ car }: { car: CarType }) => {
   return (
     <div
       onClick={() => router.push(`/cars/${car.id}`)}
-      className="w-full md:w-[300px] m-4 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+      className="w-full md:w-[300px] m-4 p-6 bg-white rounded-xl hover:ring-white hover:ring-2 transition-shadow cursor-pointer"
     >
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold text-[#1C1F20]">

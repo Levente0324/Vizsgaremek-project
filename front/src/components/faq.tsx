@@ -41,15 +41,15 @@ const Faq = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-16 px-4">
-      <h2 className="text-4xl md:text-5xl font-medium text-center text-[#1C1F20] mb-12">
+    <div className="w-full max-w-5xl mx-auto py-16 px-4">
+      <h2 className="text-4xl md:text-5xl font-medium text-center text-[#1C1F20] mb-12 select-none">
         Frequently Asked Questions
       </h2>
       <div className="space-y-4">
         {faqData.map((faq, index) => (
           <div
             key={index}
-            className="border border-gray-200 rounded-xl overflow-hidden"
+            className="border border-gray-200 rounded-xl overflow-hidden shadow-2xl"
           >
             <button
               className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 flex justify-between items-center"

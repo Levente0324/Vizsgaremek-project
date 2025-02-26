@@ -268,7 +268,7 @@ export default function CarDetailPage({
                       selected={startDate}
                       onChange={(date) => setStartDate(date)}
                       minDate={new Date()}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
                       placeholderText="Select start date"
                     />
                   </div>
@@ -280,7 +280,7 @@ export default function CarDetailPage({
                       selected={endDate}
                       onChange={(date) => setEndDate(date)}
                       minDate={startDate || new Date()}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-xl"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
                       placeholderText="Select end date"
                     />
                   </div>

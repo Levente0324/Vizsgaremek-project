@@ -33,7 +33,7 @@ const Filters = ({
             <select
               value={selectedFilters.manufacturer}
               onChange={(e) => onFilterChange("manufacturer", e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20]"
+              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20] hover:cursor-pointer focus:cursor-default"
             >
               <option value="">All Manufacturers</option>
               {manufacturers.map((manufacturer) => (
@@ -51,7 +51,7 @@ const Filters = ({
             <select
               value={selectedFilters.type}
               onChange={(e) => onFilterChange("type", e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20]"
+              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20] hover:cursor-pointer focus:cursor-default"
             >
               <option value="">All Types</option>
               {types.map((type) => (
@@ -69,7 +69,7 @@ const Filters = ({
             <select
               value={selectedFilters.fuelType}
               onChange={(e) => onFilterChange("fuelType", e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20]"
+              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20] hover:cursor-pointer focus:cursor-default"
             >
               <option value="">All Fuel Types</option>
               {fuelTypes.map((fuelType) => (
@@ -87,7 +87,7 @@ const Filters = ({
             <select
               value={selectedFilters.seats}
               onChange={(e) => onFilterChange("seats", e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20]"
+              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20] hover:cursor-pointer focus:cursor-default"
             >
               <option value="">Any Seats</option>
               {[2, 4, 5, 7].map((seats) => (
@@ -105,7 +105,7 @@ const Filters = ({
             <select
               value={selectedFilters.transmission}
               onChange={(e) => onFilterChange("transmission", e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20]"
+              className="w-full p-2 border rounded-lg focus:ring-[#1C1F20] hover:cursor-pointer focus:cursor-default"
             >
               <option value="">Any Transmission</option>
               <option value="Automatic">Automatic</option>

@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-[#F1EFEA] py-4 px-4 md:px-24 flex flex-col md:flex-row justify-between items-center rounded-3xl gap-4 md:gap-0">
       <Link href="/">
-        <div className="text-black text-4xl font-bold font-custom tracking-wide">
+        <div className="text-black text-4xl font-bold font-custom tracking-wide hover:text-[#AA4D2B] cursor-pointer transition-all select-none">
           Car Rental
         </div>
       </Link>
@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
         <select
           value={currency}
           onChange={(e) => handleCurrencyChange(e.target.value)}
-          className="w-full md:w-auto bg-[#F1EFEA] text-[#1C1F20] text-lg px-1 py-0 rounded-lg hover:text-[#AA4D2B] outline-none transition-colors cursor-pointer"
+          className="w-full md:w-auto bg-[#F1EFEA] text-[#1C1F20] text-lg px-1 py-0 rounded-lg hover:text-[#AA4D2B] outline-none border-none cursor-pointer hover:underline underline-offset-4 transition-all"
         >
           <option value="HUF">HUF</option>
           <option value="EUR">EUR</option>
@@ -119,12 +119,12 @@ const Navbar: React.FC = () => {
         ) : (
           <div className="flex flex-col md:flex-row w-full md:w-auto gap-2 md:gap-2">
             <Link href="/sign-in" className="w-full md:w-auto">
-              <button className="w-full bg-[#F1EFEA] text-[#1C1F20] text-lg px-4 py-1 rounded border-2 border-black hover:bg-[#e8e6e1] hover:text-[#AA4D2B] transition-colors">
+              <button className="w-full bg-[#F1EFEA] text-[#1C1F20] text-lg px-4 py-1 rounded border-2 border-black hover:bg-[#e8e6e1] hover:text-[#AA4D2B] hover:ring-1 hover:ring-[#AA4D2B] hover:border-[#AA4D2B] transition-all">
                 Login
               </button>
             </Link>
             <Link href="/sign-up" className="w-full md:w-auto">
-              <button className="w-full bg-[#F1EFEA] text-[#1C1F20] text-lg px-4 py-1 rounded border-2 border-black hover:bg-[#e8e6e1] hover:text-[#AA4D2B] transition-colors">
+              <button className="w-full bg-[#F1EFEA] text-[#1C1F20] text-lg px-4 py-1 rounded border-2 border-black hover:bg-[#e8e6e1] hover:text-[#AA4D2B] hover:ring-1 hover:ring-[#AA4D2B] hover:border-[#AA4D2B] transition-all">
                 Register
               </button>
             </Link>

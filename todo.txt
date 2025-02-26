@@ -5,10 +5,12 @@
 ✅ fizetesnel adatok megadasa
 ✅ Faq
 ✅ reviews (maga az oldalhoz)
-about us page 
+✅ credit card regex
 
+about us page 
+price filter
 
 // bonusz
 ✅ eur - huf (penznem valaszto)  
-Detailed car images/gallery for each car
 ✅ Email notifications for bookings/confirmations
+Detailed car images/gallery for each car
