@@ -78,7 +78,7 @@ export default function Home() {
         <Hero />
         <Search />
       </div>
-      <div className="flex flex-col justify-center items-center mt-10 pb-8 md:px-0 bg-[#1C1F20] rounded-[50px] shadow-2xl">
+      <div className="flex flex-col justify-center items-center mt-10 pb-8 md:px-0 bg-gradient-to-b from-[#1C1F20] to-zinc-700 rounded-[50px] shadow-2xl ring-1 ring-zinc-700">
         <div className="flex flex-col justify-center items-center mt-10 px-4 md:px-0">
           <h1 className="text-3xl md:text-5xl text-white font-bold text-center select-none">
             Recommended picks

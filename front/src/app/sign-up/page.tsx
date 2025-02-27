@@ -141,7 +141,7 @@ export default function SignUpPage() {
 
             <button
               type="submit"
-              className="w-full bg-[#AA4D2B] text-white text-lg py-3 px-4 rounded-md hover:bg-[#943f21] focus:outline-none focus:ring-2 focus:ring-[#AA4D2B] focus:ring-offset-2"
+              className="w-full bg-[#AA4D2B] text-white text-lg py-3 px-4 rounded-md hover:bg-[#943f21] hover:ring-1 hover:ring-[#943f21] focus:outline-none focus:ring-2 focus:ring-[#AA4D2B] focus:ring-offset-2 transition-all"
             >
               Sign Up
             </button>

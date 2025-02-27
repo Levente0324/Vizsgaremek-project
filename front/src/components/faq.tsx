@@ -49,7 +49,7 @@ const Faq = () => {
         {faqData.map((faq, index) => (
           <div
             key={index}
-            className="border border-gray-200 rounded-xl overflow-hidden shadow-2xl"
+            className="border border-gray-200 rounded-xl overflow-hidden shadow-2xl hover:ring-2 hover:ring-gray-200 transition-all"
           >
             <button
               className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 flex justify-between items-center"

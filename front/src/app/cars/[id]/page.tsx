@@ -289,7 +289,7 @@ export default function CarDetailPage({
                     disabled={!car.isAvailable}
                     className={`w-full py-2.5 px-4 rounded-xl text-white font-medium text-lg ${
                       car.isAvailable
-                        ? "bg-[#AA4D2B] hover:bg-[#943f21]"
+                        ? "bg-[#AA4D2B] hover:bg-[#943f21] hover:ring-1 hover:ring-[#943f21] transition-all"
                         : "bg-gray-400 cursor-not-allowed"
                     }`}
                   >
