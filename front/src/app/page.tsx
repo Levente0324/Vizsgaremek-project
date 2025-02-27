@@ -8,6 +8,7 @@ import Reviews from "@/components/reviews";
 import Faq from "@/components/faq";
 import Selling from "@/components/selling-points";
 import Footer from "@/components/footer";
+import Aboutus from "@/components/aboutus";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
@@ -117,6 +118,9 @@ export default function Home() {
       </div>
       <div className="mb-6 px-4 md:px-16">
         <Reviews />
+      </div>
+      <div>
+        <Aboutus />
       </div>
       <div>
         <Faq />

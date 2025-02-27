@@ -1,8 +1,50 @@
-@import url("https://fonts.googleapis.com/css2?family=Dangrek&family=Roboto+Condensed&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dangrek&family=Roboto+Condensed:wght@300;400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-[#1C1F20] text-base leading-normal;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-medium tracking-tight;
+}
+
+.hero-gradient {
+  @apply bg-gradient-to-tr from-[#d9af9e] to-[#78270a];
+}
+
+.bg-blur {
+  @apply backdrop-blur-md bg-white/30;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200;
+}
+
+.button-base {
+  @apply px-4 py-2 rounded-xl font-medium transition-all duration-200;
+}
+
+.button-primary {
+  @apply button-base bg-[#AA4D2B] text-white hover:bg-[#943f21] hover:ring-2 hover:ring-[#943f21];
+}
+
+.button-secondary {
+  @apply button-base bg-white text-[#AA4D2B] border border-[#AA4D2B] hover:bg-[#AA4D2B]/10;
+}
 
 @media (max-width: 768px) {
   body {
@@ -89,23 +131,22 @@
     border-radius: 1rem !important;
   }
 
-  /* Ensure search component has proper spacing */
   .search-container {
-    padding: 1rem !important;
+    padding: 1.25rem !important;
     margin-top: -3rem !important;
     width: 100%;
     max-width: 100%;
+    border-radius: 0.75rem !important;
   }
 
-  /* Fix search button on mobile */
   button.search-button {
     width: 100% !important;
     height: 50px !important;
     min-width: 80px;
-    margin-top: 8px;
+    margin-top: 12px;
+    font-size: 1.125rem !important;
   }
 
-  /* Ensure the hero title stays in position on mobile */
   .hero-title {
     margin-top: 24px !important;
     margin-right: 16px !important;
@@ -116,7 +157,6 @@
     right: 0;
   }
 
-  /* Fix form inputs in auth pages */
   form .w-full {
     width: 100%;
   }
@@ -135,21 +175,29 @@
     margin-top: 1rem !important;
   }
 
-  /* Additional small screen fixes */
   .search-box {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
   .hero-title {
-    margin-right: 0.5rem !important;
-    font-size: 2.5rem !important;
     font-size: 2.25rem !important;
     margin-right: 1rem !important;
     margin-top: 1rem !important;
   }
+
+  .card-grid {
+    gap: 1rem !important;
+  }
+
+  .button-primary,
+  .button-secondary {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 1.125rem;
+  }
 }
 
-/* Fix for specific flexbox issues on mobile */
 @media (max-width: 640px) {
   .mobile-column-flex {
     flex-direction: column !important;
@@ -159,50 +207,68 @@
     width: 100% !important;
   }
 
-  /* Center icons in selling points on mobile */
   .icon-container {
     display: flex;
     justify-content: center;
     width: 100%;
   }
 
-  /* Fix auth form inputs on small screens */
   form {
     width: 100%;
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  input,
+  select,
+  textarea {
+    min-height: 48px;
+    font-size: 16px !important;
+  }
 }
 
-/* Make sure search component is properly centered */
 .search-container {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Make sure the hero title stays at top right */
 .hero-title {
   align-self: flex-start;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Ensure auth form inputs take full width */
 .auth-input {
   width: 100% !important;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
 }
 
-/* Make sure the hero image stays responsive */
+.auth-input:focus {
+  border-color: #aa4d2b;
+  box-shadow: 0 0 0 3px rgba(170, 77, 43, 0.15);
+}
+
 .hero-image {
   height: 100%;
   width: 100%;
   object-fit: cover;
   object-position: center;
+  filter: brightness(0.95);
 }
 
-/* Ensure the hero component maintains proper dimensions */
 .hero-container {
   position: relative;
   width: 100%;
   overflow: hidden;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
