@@ -53,8 +53,8 @@ export default function SignUpPage() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="mt-6 w-[800px]">
-        <div className="flex justify-start px-4 py-2">
+      <div className="mt-6 w-full max-w-[800px] px-4">
+        <div className="flex justify-start py-2">
           <a
             href="/"
             className="flex items-center text-xl text-[#AA4D2B] hover:text-[#943f21]"
@@ -77,9 +77,11 @@ export default function SignUpPage() {
           </a>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col justify-center items-center w-[800px] h-auto bg-white rounded-3xl py-8 px-6 border-2 mt-20">
-          <h2 className="text-5xl text-[#1C1F20] font-bold mb-8">Sign Up</h2>
+      <div className="flex flex-col justify-center items-center w-full px-4">
+        <div className="flex flex-col justify-center items-center w-full max-w-[800px] h-auto bg-white rounded-3xl py-8 px-4 sm:px-6 border-2 mt-10 md:mt-20">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl text-[#1C1F20] font-bold mb-8 text-center">
+            Sign Up
+          </h2>
 
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 w-full max-w-md">
@@ -87,8 +89,11 @@ export default function SignUpPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-md">
-            <div>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 w-full max-w-md px-4 md:px-8"
+          >
+            <div className="w-full">
               <label
                 htmlFor="email"
                 className="block text-[#1C1F20] text-lg font-medium mb-2"
@@ -105,7 +110,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div>
+            <div className="w-full">
               <label
                 htmlFor="password"
                 className="block text-[#1C1F20] text-lg font-medium mb-2"
@@ -122,7 +127,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div>
+            <div className="w-full">
               <label
                 htmlFor="confirmPassword"
                 className="block text-[#1C1F20] text-lg font-medium mb-2"

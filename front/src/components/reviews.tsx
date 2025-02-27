@@ -37,15 +37,15 @@ const Reviews = () => {
   ];
 
   return (
-    <div className="flex flex-col justify-center items-center mt-10 px-4 md:px-0">
-      <h1 className="text-3xl md:text-4xl text-[#1C1F20] font-medium text-center select-none">
+    <div className="flex flex-col justify-center items-center mt-12 px-4 md:px-0">
+      <h1 className="text-4xl md:text-5xl text-[#1C1F20] font-medium text-center select-none">
         What our customers say
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 w-full max-w-6xl">
         {reviews.map((review, index) => (
           <div
             key={index}
-            className="bg-white p-6 rounded-xl shadow-2xl transition-shadow"
+            className="bg-white p-6 rounded-2xl shadow-2xl transition-shadow"
           >
             <StarRating />
             <h2 className="text-2xl font-medium text-[#1C1F20] mt-4 mb-2">

@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="px-4 md:px-64 py-2 bg-[#F1EFEA] font-custom bg-gradient-to-b from-[#F1EFEA] to-[#ffd6c8] min-h-screen h-full">
+      <body className="px-4 md:px-64 pt-2 bg-[#F1EFEA] font-custom2 bg-gradient-to-b from-[#F1EFEA] to-[#ffd6c8] min-h-screen h-full">
         {children}
       </body>
     </html>

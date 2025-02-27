@@ -10,6 +10,7 @@ export default {
     extend: {
       fontFamily: {
         custom: ["Dangrek"],
+        custom2: ["Roboto Condensed"],
       },
     },
   },

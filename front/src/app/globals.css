@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Dangrek&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dangrek&family=Roboto+Condensed&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -48,8 +48,6 @@
 
   .space-x-2 {
     gap: 0.5rem !important;
-    display: flex !important;
-    flex-direction: column !important;
   }
 
   .w-36 {
@@ -84,10 +82,43 @@
 
   input[type="date"] {
     width: 100% !important;
+    min-width: 0;
   }
 
   .rounded-3xl {
     border-radius: 1rem !important;
+  }
+
+  /* Ensure search component has proper spacing */
+  .search-container {
+    padding: 1rem !important;
+    margin-top: -3rem !important;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Fix search button on mobile */
+  button.search-button {
+    width: 100% !important;
+    height: 50px !important;
+    min-width: 80px;
+    margin-top: 8px;
+  }
+
+  /* Ensure the hero title stays in position on mobile */
+  .hero-title {
+    margin-top: 24px !important;
+    margin-right: 16px !important;
+    align-self: flex-end;
+    font-size: 2.5rem !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  /* Fix form inputs in auth pages */
+  form .w-full {
+    width: 100%;
   }
 }
 
@@ -103,4 +134,75 @@
   .space-y-6 {
     margin-top: 1rem !important;
   }
+
+  /* Additional small screen fixes */
+  .search-box {
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title {
+    margin-right: 0.5rem !important;
+    font-size: 2.5rem !important;
+    font-size: 2.25rem !important;
+    margin-right: 1rem !important;
+    margin-top: 1rem !important;
+  }
+}
+
+/* Fix for specific flexbox issues on mobile */
+@media (max-width: 640px) {
+  .mobile-column-flex {
+    flex-direction: column !important;
+  }
+
+  .mobile-full-width {
+    width: 100% !important;
+  }
+
+  /* Center icons in selling points on mobile */
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Fix auth form inputs on small screens */
+  form {
+    width: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Make sure search component is properly centered */
+.search-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Make sure the hero title stays at top right */
+.hero-title {
+  align-self: flex-start;
+}
+
+/* Ensure auth form inputs take full width */
+.auth-input {
+  width: 100% !important;
+}
+
+/* Make sure the hero image stays responsive */
+.hero-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Ensure the hero component maintains proper dimensions */
+.hero-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }

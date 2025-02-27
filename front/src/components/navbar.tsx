@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-[#F1EFEA] py-4 px-4 md:px-24 flex flex-col md:flex-row justify-between items-center rounded-3xl gap-4 md:gap-0">
       <Link href="/">
-        <div className="text-black text-4xl font-bold font-custom tracking-wide hover:text-[#AA4D2B] cursor-pointer transition-all select-none">
+        <div className="text-black text-4xl font-extrabold tracking-wide hover:text-[#AA4D2B] cursor-pointer transition-all select-none">
           Car Rental
         </div>
       </Link>
