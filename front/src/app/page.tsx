@@ -73,34 +73,34 @@ export default function Home() {
   }, [cars]);
 
   return (
-    <>
-      <div className="mb-2 px-4 md:px-0">
+    <div className="max-w-[1920px] mx-auto">
+      <div className="mb-4">
         <Navbar />
       </div>
-      <div className="flex flex-col justify-center items-center px-4 md:px-0">
+      <div className="flex flex-col justify-center items-center">
         <Hero />
         <Search />
       </div>
-      <div className="flex flex-col justify-center items-center mt-12 md:mt-16 px-4 md:px-24">
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-center select-none text-transparent bg-clip-text bg-gradient-to-tr from-[#d9af9e] to-[#78270a]">
+      <div className="flex flex-col justify-center items-center mt-16 md:mt-20 px-4">
+        <h1 className="text-7xl lg:text-8xl font-black text-center select-none text-transparent bg-clip-text bg-gradient-to-tr from-[#d9af9e] to-[#78270a] max-w-[1200px]">
           RENT PREMIUM CARS FOR THE BEST PRICE FOR YOUR TRIP
         </h1>
       </div>
-      <div className="flex flex-col justify-center items-center mt-12 md:mt-16 px-4 md:px-0">
-        <h1 className="text-3xl md:text-5xl text-[#1C1F20] font-black text-center select-none">
+      <div className="flex flex-col justify-center items-center mt-16 md:mt-16">
+        <h1 className="text-4xl md:text-5xl text-[#1C1F20] font-black text-center select-none mb-2">
           Why choose us
         </h1>
         <Selling />
       </div>
-      <div className="flex flex-col justify-center items-center mt-12 md:mt-16 pb-8 md:px-0 bg-gradient-to-b from-[#1C1F20] to-zinc-700 rounded-3xl md:rounded-[50px] shadow-2xl ring-1 ring-zinc-700">
-        <div className="flex flex-col justify-center items-center mt-10 px-4 md:px-0">
-          <h1 className="text-3xl md:text-5xl text-white font-bold text-center select-none">
+      <div className="flex flex-col justify-center items-center mt-16 md:mt-24 pb-12 bg-gradient-to-b from-[#1C1F20] to-zinc-700 rounded-3xl shadow-2xl ring-1 ring-zinc-700 max-w-[1400px] mx-auto">
+        <div className="flex flex-col justify-center items-center mt-10 px-4">
+          <h1 className="text-4xl md:text-5xl text-white font-bold text-center select-none mb-2">
             Recommended picks
           </h1>
         </div>
         <div
           ref={containerRef}
-          className="flex flex-wrap justify-center items-center mt-5 w-full h-full px-4 md:px-0"
+          className="flex flex-wrap justify-center items-stretch gap-2 mt-5 w-full px-4 pb-2"
         >
           {loading ? (
             <div className="text-white text-xl p-6">Loading...</div>
@@ -109,23 +109,23 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="flex justify-center items-center mt-6 mb-10 md:mb-14">
+      <div className="flex justify-center items-center mt-10 mb-16">
         <Link href="/cars">
-          <button className="w-44 h-14 text-xl bg-[#AA4D2B] text-white px-4 py-2 rounded-xl hover:bg-[#943f21] hover:ring-2 hover:ring-[#943f21] transition-all">
-            Show all cars
+          <button className="w-52 h-14 text-xl bg-[#AA4D2B] text-white px-6 py-3 rounded-xl hover:bg-[#943f21] hover:shadow-lg hover:scale-105 transition-all duration-300">
+            Browse all cars
           </button>
         </Link>
       </div>
-      <div className="mb-6 px-4 md:px-16">
+      <div className="mb-16 px-4 max-w-[1400px] mx-auto">
         <Reviews />
       </div>
-      <div>
+      <div className="max-w-[1400px] mx-auto">
         <Aboutus />
       </div>
-      <div>
+      <div className="max-w-[1400px] mx-auto">
         <Faq />
       </div>
       <Footer />
-    </>
+    </div>
   );
 }

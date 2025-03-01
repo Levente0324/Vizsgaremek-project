@@ -125,16 +125,18 @@ export default function CarsPage() {
           selectedFilters={selectedFilters}
           onFilterChange={handleFilterChange}
         />
-        <div className="flex flex-wrap justify-center items-center gap-4 w-full max-w-[1600px] px-4">
-          {loading ? (
-            <div className="flex justify-center items-center min-h-[50vh]">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#AA4D2B]"></div>
-            </div>
-          ) : filteredCars.length === 0 ? (
-            <div className="text-gray-600 text-lg">No cars found</div>
-          ) : (
-            filteredCars.map((car) => <Car key={car.id} car={car} />)
-          )}
+        <div className="bg-transparent max-w-[1400px] w-full mx-auto py-2">
+          <div className="flex flex-wrap justify-center items-stretch gap-6">
+            {loading ? (
+              <div className="flex justify-center items-center min-h-[50vh]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#AA4D2B]"></div>
+              </div>
+            ) : filteredCars.length === 0 ? (
+              <div className="text-white text-lg py-12">No cars found</div>
+            ) : (
+              filteredCars.map((car) => <Car key={car.id} car={car} />)
+            )}
+          </div>
         </div>
       </div>
     </>

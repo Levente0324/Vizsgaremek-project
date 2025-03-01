@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { COLORS, TRANSITIONS, ROUNDED, SHADOWS } from "@/utils/styles";
 
 const Navbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,7 +33,6 @@ const Navbar: React.FC = () => {
   const handleCurrencyChange = (newCurrency: string) => {
     setCurrency(newCurrency);
     localStorage.setItem("currency", newCurrency);
-
     router.refresh();
   };
 
@@ -62,17 +62,20 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-[#F1EFEA] py-4 px-4 md:px-24 flex flex-col md:flex-row justify-between items-center rounded-3xl gap-4 md:gap-0">
+    <nav className="py-2 px-6 md:px-16 mt-2 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 max-w-[1400px] mx-auto">
       <Link href="/">
-        <div className="text-black text-4xl font-extrabold tracking-wide hover:text-[#AA4D2B] cursor-pointer transition-all select-none">
+        <div
+          className={`text-black text-4xl font-extrabold tracking-wide hover:text-[${COLORS.primary.DEFAULT}] cursor-pointer ${TRANSITIONS.DEFAULT} select-none`}
+        >
           Car Rental
         </div>
       </Link>
+
       <div className="flex flex-col md:flex-row items-center w-full md:w-auto gap-4 md:gap-8">
         <select
           value={currency}
           onChange={(e) => handleCurrencyChange(e.target.value)}
-          className="w-full md:w-auto bg-[#F1EFEA] text-[#1C1F20] text-lg px-1 py-0 rounded-lg hover:text-[#AA4D2B] outline-none border-none cursor-pointer hover:underline underline-offset-4 transition-all"
+          className={`w-full md:w-auto bg-transparent text-black font-medium text-lg md:mr-8 px-2 py-1 ${ROUNDED.lg} hover:text-[#943f21] outline-none border-none cursor-pointer hover:underline underline-offset-4 ${TRANSITIONS.DEFAULT}`}
         >
           <option value="HUF">HUF</option>
           <option value="EUR">EUR</option>
@@ -82,7 +85,7 @@ const Navbar: React.FC = () => {
           <div className="relative w-full md:w-auto" ref={dropdownRef}>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="w-full md:w-auto bg-[#F1EFEA] text-black text-lg px-4 py-1 rounded border-2 border-black hover:ring-2 hover:ring-[#AA4D2B] hover:border-[#AA4D2B] flex items-center justify-center md:justify-start space-x-2 hover:bg-[#e8e6e1] transition-all"
+              className="w-full md:w-full text-black text-lg flex items-center justify-start md:justify-start ml-2 md:ml-8 mr-4"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +93,7 @@ const Navbar: React.FC = () => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className={`w-8 h-8 md:w-[30px] md:h-[30px] text-black hover:text-[${COLORS.primary.DEFAULT}] ${TRANSITIONS.DEFAULT}`}
               >
                 <path
                   strokeLinecap="round"
@@ -100,16 +103,18 @@ const Navbar: React.FC = () => {
               </svg>
             </button>
             {showDropdown && (
-              <div className="absolute left-0 md:right-0 md:left-auto top-full mt-2 w-full md:w-48 bg-white rounded-xl shadow-lg py-1 z-10">
+              <div
+                className={`absolute left-0 md:right-4 md:left-auto top-full mt-1 w-full md:w-48 bg-white ${ROUNDED.md} ${SHADOWS.lg} py-1 z-10`}
+              >
                 <Link
                   href="/profile"
-                  className="block px-4 py-2 text-base text-[#1C1F20] hover:bg-[#F1EFEA] hover:text-[#AA4D2B] text-center md:text-left transition-all"
+                  className={`block px-4 py-2 text-base text-[${COLORS.text.dark}] hover:bg-[${COLORS.background.light}] hover:text-[#AA4D2B] text-center md:text-left ${TRANSITIONS.DEFAULT}`}
                 >
                   Profile
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-center md:text-left px-4 py-2 text-base text-[#1C1F20] hover:bg-[#F1EFEA] hover:text-[#AA4D2B] transition-all"
+                  className={`block w-full text-center md:text-left px-4 py-2 text-base text-[${COLORS.text.dark}] hover:bg-[#F1EFEA] hover:text-[#AA4D2B] ${TRANSITIONS.DEFAULT}`}
                 >
                   Logout
                 </button>
@@ -117,15 +122,33 @@ const Navbar: React.FC = () => {
             )}
           </div>
         ) : (
-          <div className="flex flex-col md:flex-row w-full md:w-auto gap-2 md:gap-2">
-            <Link href="/sign-in" className="w-full md:w-auto">
-              <button className="w-full bg-[#F1EFEA] text-[#1C1F20] text-lg px-4 py-1 rounded border-2 border-black hover:bg-[#e8e6e1] hover:text-[#AA4D2B] hover:ring-1 hover:ring-[#AA4D2B] hover:border-[#AA4D2B] transition-all">
-                Login
+          <div className="flex flex-col justify-between sm:flex-row w-full md:w-auto gap-2 sm:gap-3 md:gap-4 items-center">
+            <Link href="/sign-in" className="w-full sm:w-auto">
+              <button
+                className={`w-full bg-transparent text-black hover:text-[${COLORS.primary.dark}] text-xl font-medium py-2 ${TRANSITIONS.DEFAULT} relative overflow-hidden group`}
+              >
+                <span className="relative z-10">Login</span>
+                <span
+                  className={`absolute bottom-2 left-0 w-0 h-0.5 bg-[${COLORS.primary.DEFAULT}] group-hover:w-full ${TRANSITIONS.DEFAULT}`}
+                ></span>
               </button>
             </Link>
-            <Link href="/sign-up" className="w-full md:w-auto">
-              <button className="w-full bg-[#F1EFEA] text-[#1C1F20] text-lg px-4 py-1 rounded border-2 border-black hover:bg-[#e8e6e1] hover:text-[#AA4D2B] hover:ring-1 hover:ring-[#AA4D2B] hover:border-[#AA4D2B] transition-all">
-                Register
+
+            <div className="flex items-center justify-center">
+              <h1 className="text-black text-xl font-bold w-auto hidden sm:block">
+                /
+              </h1>
+              <div className="w-12 h-0.5 bg-gray-300 sm:hidden"></div>
+            </div>
+
+            <Link href="/sign-up" className="w-full sm:w-auto">
+              <button
+                className={`w-full bg-transparent text-black hover:text-[${COLORS.primary.dark}] text-xl font-medium py-2 ${TRANSITIONS.DEFAULT} relative overflow-hidden group`}
+              >
+                <span className="relative z-10">Register</span>
+                <span
+                  className={`absolute bottom-2 left-0 w-0 h-0.5 bg-[${COLORS.primary.DEFAULT}] group-hover:w-full ${TRANSITIONS.DEFAULT}`}
+                ></span>
               </button>
             </Link>
           </div>

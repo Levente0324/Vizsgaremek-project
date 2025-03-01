@@ -11,6 +11,7 @@ html {
 body {
   @apply text-[#1C1F20] text-base leading-normal;
   font-family: "Roboto Condensed", sans-serif;
+  overflow-x: hidden;
 }
 
 h1,
@@ -44,6 +45,27 @@ h6 {
 
 .button-secondary {
   @apply button-base bg-white text-[#AA4D2B] border border-[#AA4D2B] hover:bg-[#AA4D2B]/10;
+}
+
+/* Add new animation classes */
+.hover-rise {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+}
+
+.pulse-slow {
+  animation: pulse-animation 3s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 768px) {
@@ -233,6 +255,7 @@ h6 {
 
 .search-container {
   width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -10,7 +10,7 @@ const SellingPoint = ({
   icon: React.ReactNode;
 }) => {
   return (
-    <div className="bg-gradient-to-br from-white via-gray-50 to-gray-100 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center backdrop-blur-sm backdrop-filter relative overflow-hidden group hover:transform hover:-translate-y-0.5">
+    <div className="bg-gradient-to-br from-white to-gray-100 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center backdrop-blur-sm backdrop-filter relative overflow-hidden group hover:transform hover:-translate-y-0.5">
       <div
         className="absolute inset-0 opacity-[0.05] pointer-events-none"
         style={{

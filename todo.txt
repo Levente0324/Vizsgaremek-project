@@ -13,6 +13,5 @@ price filter
 // bonusz
 ✅ eur - huf (penznem valaszto)  
 ✅ Email notifications for bookings/confirmations
-Detailed car images/gallery for each car
+✅ Detailed car images/gallery for each car
 
-search md:w-[900px] to 1000px 

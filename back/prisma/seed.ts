@@ -430,6 +430,14 @@ async function seedExtras() {
     },
   ];
 
+  for (const extra of extras) {
+    await prisma.extra.create({ data: extra });
+  }
+
+  console.log('Extras seeded');
+}
+
+async function seedProtections() {
   const protections = [
     {
       name: 'Basic',
@@ -448,62 +456,95 @@ async function seedExtras() {
     },
   ];
 
-  for (const extra of extras) {
-    await prisma.extra.create({ data: extra });
-  }
+  global.protectionOptions = protections;
 
-  console.log('Extras seeded');
+  console.log('Protections prepared (will be created with bookings)');
 }
 
 async function main() {
-  await seedCars();
-  await seedExtras();
+  try {
+    await seedCars();
+    await seedExtras();
+    await seedProtections();
 
-  const user1 = await prisma.user.create({
-    data: {
-      email: faker.internet.email(),
-      password: await argon2.hash('adminpass'),
-      isAdmin: true,
-    },
-  });
-
-  const user2 = await prisma.user.create({
-    data: {
-      email: faker.internet.email(),
-      password: await argon2.hash('userpass'),
-      isAdmin: false,
-    },
-  });
-
-  const randomCar = await prisma.car.findFirst({
-    where: {
-      id: faker.number.int({ min: 1, max: 36 }),
-    },
-  });
-
-  if (randomCar) {
-    const startDate = faker.date.recent();
-    const endDate = faker.date.future();
-    const days = Math.ceil(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
-    );
-
-    const booking = await prisma.booking.create({
+    // Create admin user
+    const adminUser = await prisma.user.create({
       data: {
-        startDate: startDate,
-        endDate: endDate,
-        carId: randomCar.id,
-        userId: user1.id,
-        totalPrice: randomCar.priceForOneDay * days, // Calculate total price based on days
-        protection: {
-          create: {
-            name: 'Basic',
-            price: 5000,
-            description: 'Basic coverage for minor damages',
-          },
-        },
+        email: 'admin@example.com',
+        password: await argon2.hash('adminpass'),
+        isAdmin: true,
       },
     });
+
+    console.log('Admin user created:', adminUser.email);
+
+    const regularUser = await prisma.user.create({
+      data: {
+        email: 'user@example.com',
+        password: await argon2.hash('userpass'),
+        isAdmin: false,
+      },
+    });
+
+    console.log('Regular user created:', regularUser.email);
+
+    const cars = await prisma.car.findMany({ take: 5 });
+    const extras = await prisma.extra.findMany();
+
+    for (let i = 0; i < 3; i++) {
+      const car = cars[i % cars.length];
+      const user = i % 2 === 0 ? adminUser : regularUser;
+
+      const startDate = faker.date.soon({ days: 5 });
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + faker.number.int({ min: 1, max: 7 }));
+
+      const days = Math.ceil(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+      );
+
+      const selectedProtection =
+        global.protectionOptions[
+          faker.number.int({ min: 0, max: global.protectionOptions.length - 1 })
+        ];
+
+      const booking = await prisma.booking.create({
+        data: {
+          startDate,
+          endDate,
+          carId: car.id,
+          userId: user.id,
+          totalPrice: car.priceForOneDay * days + selectedProtection.price,
+          protection: {
+            create: {
+              name: selectedProtection.name,
+              price: selectedProtection.price,
+              description: selectedProtection.description,
+            },
+          },
+        },
+      });
+
+      const numberOfExtras = faker.number.int({ min: 0, max: 2 });
+      for (let j = 0; j < numberOfExtras; j++) {
+        const randomExtra =
+          extras[faker.number.int({ min: 0, max: extras.length - 1 })];
+        await prisma.extraOnBookings.create({
+          data: {
+            bookingId: booking.id,
+            extraId: randomExtra.id,
+          },
+        });
+      }
+
+      console.log(
+        `Created booking #${booking.id} for car ${car.manufacturer} ${car.model}`,
+      );
+    }
+
+    console.log('Database seeding completed successfully!');
+  } catch (error) {
+    console.error('Error during seeding:', error);
   }
 }
 

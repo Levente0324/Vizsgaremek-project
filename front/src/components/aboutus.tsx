@@ -5,7 +5,7 @@ const Aboutus = () => {
   return (
     <section id="about" className="w-full px-4 md:px-8 mt-16 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-medium text-center text-[#1C1F20] mb-8">
+        <h1 className="text-4xl md:text-5xl font-medium text-center text-[#1C1F20] mb-6">
           <span className="bg-gradient-to-r from-[#AA4D2B] to-[#78270a] bg-clip-text text-transparent">
             About Us
           </span>
@@ -16,8 +16,8 @@ const Aboutus = () => {
           <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#AA4D2B]/10 rounded-full blur-3xl"></div>
 
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
-            <div className="flex-shrink-0 flex justify-center">
-              <div className="w-32 h-32 md:w-40 md:h-40 bg-[#AA4D2B] rounded-full flex items-center justify-center shadow-lg transform hover:rotate-3 hover:scale-105 transition-transform duration-300">
+            <div className="flex-shrink-0 flex justify-center items-center">
+              <div className="w-32 h-32 md:w-40 md:h-40 bg-[#AA4D2B] rounded-full flex place-items-center justify-center shadow-lg transform hover:rotate-3 hover:scale-105 transition-transform duration-300">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="px-4 md:px-64 pt-2 bg-[#F1EFEA] font-custom2 bg-gradient-to-b from-[#F1EFEA] to-[#ffd6c8] min-h-screen h-full overflow-x-hidden selection:bg-[#AA4D2B]/20 selection:text-[#1C1F20]">
+      <body className="px-4 md:px-16 lg:px-72 pt-2 bg-[#F1EFEA] font-custom2 bg-gradient-to-b from-[#F1EFEA] to-[#ffdcd0] min-h-screen h-full overflow-x-hidden selection:bg-[#AA4D2B]/20 selection:text-[#1C1F20]">
         {children}
       </body>
     </html>
