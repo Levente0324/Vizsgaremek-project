@@ -33,7 +33,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-[#1C1F20] text-gray-300 w-screen relative left-1/2 right-1/2 -mx-[50vw] mt-12">
-      <div className="max-w-7xl mx-auto px-6 md:px-16 py-12 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 md:px-16 pb-6 pt-12 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#AA4D2B] to-transparent opacity-30"></div>
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#AA4D2B]/5 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#AA4D2B]/5 rounded-full blur-3xl"></div>
@@ -79,7 +79,7 @@ const Footer = () => {
           ))}
         </div>
 
-        <div className="mt-12 pt-6 border-t border-gray-800 text-sm text-center">
+        <div className="mt-2 pt-6 border-t border-gray-800 text-sm text-center">
           <p className="opacity-70 hover:opacity-100 transition-opacity duration-300">
             © {currentYear} Car Rental. All rights reserved.
           </p>

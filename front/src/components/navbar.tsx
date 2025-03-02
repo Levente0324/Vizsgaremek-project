@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="py-2 px-6 md:px-16 mt-2 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 max-w-[1400px] mx-auto">
+    <nav className="py-2 px-6 md:px-16 mt-4 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 max-w-[1400px] mx-auto">
       <Link href="/">
         <div
           className={`text-black text-4xl font-extrabold tracking-wide hover:text-[${COLORS.primary.DEFAULT}] cursor-pointer ${TRANSITIONS.DEFAULT} select-none`}

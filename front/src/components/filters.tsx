@@ -22,9 +22,8 @@ const Filters = ({
   onFilterChange,
 }: FiltersProps) => {
   return (
-    <div className="w-full max-w-[1100px] mb-6 mt-2">
-      <div className="bg-white py-4 px-7 rounded-xl shadow">
-        <h2 className="text-3xl font-semibold mb-4 text-[#1C1F20]">Filters</h2>
+    <div className="w-full max-w-[1100px]">
+      <div className="bg-white py-5 px-7 rounded-xl shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div>
             <label className="block text-base font-medium text-gray-700 mb-1">

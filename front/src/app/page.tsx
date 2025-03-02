@@ -11,6 +11,9 @@ import Footer from "@/components/footer";
 import Aboutus from "@/components/aboutus";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
+import { AnimationWrapper } from "@/utils/animations";
+import { ScrollAnimation } from "@/utils/scroll-animation";
+import { motion } from "framer-motion";
 
 interface CarType {
   id: number;
@@ -74,57 +77,96 @@ export default function Home() {
 
   return (
     <div className="max-w-[1920px] mx-auto">
-      <div className="mb-4">
-        <Navbar />
-      </div>
-      <div className="flex flex-col justify-center items-center">
-        <Hero />
-        <Search />
-      </div>
-      <div className="flex flex-col justify-center items-center mt-16 md:mt-20 px-4">
-        <h1 className="text-7xl lg:text-8xl font-black text-center select-none text-transparent bg-clip-text bg-gradient-to-tr from-[#d9af9e] to-[#78270a] max-w-[1200px]">
-          RENT PREMIUM CARS FOR THE BEST PRICE FOR YOUR TRIP
-        </h1>
-      </div>
-      <div className="flex flex-col justify-center items-center mt-16 md:mt-16">
-        <h1 className="text-4xl md:text-5xl text-[#1C1F20] font-black text-center select-none mb-2">
-          Why choose us
-        </h1>
-        <Selling />
-      </div>
-      <div className="flex flex-col justify-center items-center mt-16 md:mt-24 pb-12 bg-gradient-to-b from-[#1C1F20] to-zinc-700 rounded-3xl shadow-2xl ring-1 ring-zinc-700 max-w-[1400px] mx-auto">
-        <div className="flex flex-col justify-center items-center mt-10 px-4">
-          <h1 className="text-4xl md:text-5xl text-white font-bold text-center select-none mb-2">
-            Recommended picks
+      <AnimationWrapper type="slide-down" delay={1} duration={0.5}>
+        <div className="mb-4">
+          <Navbar />
+        </div>
+      </AnimationWrapper>
+      <AnimationWrapper type="slide-up" delay={1} duration={0.4}>
+        <div className="flex flex-col justify-center items-center">
+          <Hero />
+          <Search />
+        </div>
+      </AnimationWrapper>
+
+      <AnimationWrapper type="slide-up" delay={1.1} duration={0.4}>
+        <div className="flex flex-col justify-center items-center mt-16 md:mt-20 px-4">
+          <h1 className="text-7xl lg:text-8xl font-black text-center select-none text-transparent bg-clip-text bg-gradient-to-tr from-[#d9af9e] to-[#78270a] max-w-[1200px]">
+            RENT PREMIUM CARS FOR THE BEST PRICE FOR YOUR TRIP
           </h1>
         </div>
-        <div
-          ref={containerRef}
-          className="flex flex-wrap justify-center items-stretch gap-2 mt-5 w-full px-4 pb-2"
-        >
-          {loading ? (
-            <div className="text-white text-xl p-6">Loading...</div>
-          ) : (
-            visibleCars.map((car) => <Car key={car.id} car={car} />)
-          )}
+      </AnimationWrapper>
+
+      <AnimationWrapper type="slide-up" delay={1.3} duration={0.4}>
+        <div className="flex flex-col justify-center items-center mt-16 md:mt-16">
+          <h1 className="text-4xl md:text-5xl text-[#1C1F20] font-black text-center select-none mb-2">
+            Why choose us
+          </h1>
+          <Selling />
         </div>
-      </div>
-      <div className="flex justify-center items-center mt-10 mb-16">
-        <Link href="/cars">
-          <button className="w-52 h-14 text-xl bg-[#AA4D2B] text-white px-6 py-3 rounded-xl hover:bg-[#943f21] hover:shadow-lg hover:scale-105 transition-all duration-300">
-            Browse all cars
-          </button>
-        </Link>
-      </div>
-      <div className="mb-16 px-4 max-w-[1400px] mx-auto">
-        <Reviews />
-      </div>
-      <div className="max-w-[1400px] mx-auto">
-        <Aboutus />
-      </div>
-      <div className="max-w-[1400px] mx-auto">
-        <Faq />
-      </div>
+      </AnimationWrapper>
+
+      <ScrollAnimation type="slide-up" delay={0.2}>
+        <div className="flex flex-col justify-center items-center mt-16 md:mt-24 pb-12 bg-gradient-to-b from-[#1C1F20] to-zinc-700 rounded-3xl shadow-2xl ring-1 ring-zinc-700 max-w-[1400px] mx-auto">
+          <div className="flex flex-col justify-center items-center mt-10 px-4">
+            <h1 className="text-4xl md:text-5xl text-white font-bold text-center select-none mb-2">
+              Recommended picks
+            </h1>
+          </div>
+          <div
+            ref={containerRef}
+            className="flex flex-wrap justify-center items-stretch gap-2 mt-5 w-full px-4 pb-2"
+          >
+            {loading ? (
+              <div className="text-white text-xl p-6">Loading...</div>
+            ) : (
+              visibleCars.map((car, index) => (
+                <motion.div
+                  key={car.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 + index * 0.1, duration: 0.5 }}
+                >
+                  <Car car={car} />
+                </motion.div>
+              ))
+            )}
+          </div>
+        </div>
+      </ScrollAnimation>
+
+      <ScrollAnimation type="slide-up" delay={0.2}>
+        <div className="flex justify-center items-center mt-10 mb-16">
+          <Link href="/cars">
+            <motion.button
+              className="w-52 h-14 text-xl bg-[#AA4D2B] text-white px-6 py-3 rounded-xl hover:bg-[#943f21] hover:shadow-lg hover:scale-105 transition-all duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Browse all cars
+            </motion.button>
+          </Link>
+        </div>
+      </ScrollAnimation>
+
+      <ScrollAnimation type="bounce" delay={0.2}>
+        <div className="mb-16 px-4 max-w-[1400px] mx-auto">
+          <Reviews />
+        </div>
+      </ScrollAnimation>
+
+      <ScrollAnimation type="bounce" delay={0.2}>
+        <div className="max-w-[1400px] mx-auto">
+          <Aboutus />
+        </div>
+      </ScrollAnimation>
+
+      <ScrollAnimation type="slide-up" delay={0.2}>
+        <div className="max-w-[1400px] mx-auto">
+          <Faq />
+        </div>
+      </ScrollAnimation>
+
       <Footer />
     </div>
   );

@@ -14,4 +14,3 @@ price filter
 ✅ eur - huf (penznem valaszto)  
 ✅ Email notifications for bookings/confirmations
 ✅ Detailed car images/gallery for each car
-

@@ -6,12 +6,10 @@ const Aboutus = () => {
     <section id="about" className="w-full px-4 md:px-8 mt-16 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-medium text-center text-[#1C1F20] mb-6">
-          <span className="bg-gradient-to-r from-[#AA4D2B] to-[#78270a] bg-clip-text text-transparent">
-            About Us
-          </span>
+          About Us
         </h1>
 
-        <div className="bg-gradient-to-br from-[#F1EFEA] to-[#ffd6c8] rounded-3xl shadow-2xl p-6 md:p-10 backdrop-blur-sm relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#f6f4f0] to-[#fde0d6] border border-gray-100 rounded-3xl shadow-2xl p-6 md:p-10 backdrop-blur-sm relative overflow-hidden">
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#AA4D2B]/10 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#AA4D2B]/10 rounded-full blur-3xl"></div>
 
