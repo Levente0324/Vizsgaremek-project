@@ -1,24 +1,43 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `cars` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `manufacturer` VARCHAR(191) NOT NULL,
+    `model` VARCHAR(191) NOT NULL,
+    `type` VARCHAR(191) NOT NULL,
+    `number_of_seats` INTEGER NOT NULL,
+    `number_of_suitcases` INTEGER NOT NULL,
+    `fuel_type` VARCHAR(191) NOT NULL,
+    `clutch_type` VARCHAR(191) NOT NULL,
+    `price_for_one_day` DOUBLE NOT NULL,
+    `is_available` BOOLEAN NOT NULL,
 
-  - You are about to drop the `token` table. If the table is not empty, all the data it contains will be lost.
-  - Added the required column `totalPrice` to the `bookings` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `updatedAt` to the `bookings` table without a default value. This is not possible if the table is not empty.
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-*/
--- DropForeignKey
-ALTER TABLE `token` DROP FOREIGN KEY `Token_userId_fkey`;
+-- CreateTable
+CREATE TABLE `users` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `isAdmin` BOOLEAN NOT NULL DEFAULT false,
 
--- DropIndex
-DROP INDEX `bookings_carId_key` ON `bookings`;
+    UNIQUE INDEX `users_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- AlterTable
-ALTER TABLE `bookings` ADD COLUMN `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    ADD COLUMN `totalPrice` DOUBLE NOT NULL,
-    ADD COLUMN `updatedAt` DATETIME(3) NOT NULL;
+-- CreateTable
+CREATE TABLE `bookings` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `carId` INTEGER NOT NULL,
+    `userId` INTEGER NOT NULL,
+    `startDate` DATETIME(3) NOT NULL,
+    `endDate` DATETIME(3) NOT NULL,
+    `totalPrice` DOUBLE NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
--- DropTable
-DROP TABLE `token`;
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `protections` (
@@ -63,6 +82,12 @@ CREATE TABLE `tokens` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_carId_fkey` FOREIGN KEY (`carId`) REFERENCES `cars`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `protections` ADD CONSTRAINT `protections_bookingId_fkey` FOREIGN KEY (`bookingId`) REFERENCES `bookings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -72,4 +97,4 @@ ALTER TABLE `extra_on_bookings` ADD CONSTRAINT `extra_on_bookings_bookingId_fkey
 ALTER TABLE `extra_on_bookings` ADD CONSTRAINT `extra_on_bookings_extraId_fkey` FOREIGN KEY (`extraId`) REFERENCES `extras`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `tokens` ADD CONSTRAINT `tokens_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `tokens` ADD CONSTRAINT `tokens_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
