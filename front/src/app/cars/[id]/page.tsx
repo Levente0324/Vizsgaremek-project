@@ -7,7 +7,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { use } from "react";
 import { formatPrice } from "@/utils/currency";
-import BookingSteps from "@/components/booking-steps";
 
 interface Car {
   id: number;
@@ -22,27 +21,6 @@ interface Car {
   isAvailable: boolean;
 }
 
-interface BookingData {
-  protectionPackage: {
-    name: string;
-    price: number;
-    description: string;
-  } | null;
-  extras: Array<{
-    id: string;
-    name: string;
-    price: number;
-    description: string;
-  }>;
-  paymentDetails: {
-    cardNumber: string;
-    cardHolder: string;
-    expiryDate: string;
-    cvv: string;
-  };
-  totalPrice: number;
-}
-
 export default function CarDetailPage({
   params,
 }: {
@@ -54,14 +32,9 @@ export default function CarDetailPage({
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [error, setError] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
-  const [selectedProtection, setSelectedProtection] = useState<string | null>(
-    null
-  );
-  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
-  const [step, setStep] = useState(1);
-  const [showBookingSteps, setShowBookingSteps] = useState(false);
   const router = useRouter();
   const resolvedParams = use(params);
+  
   const carId = resolvedParams.id;
 
   useEffect(() => {
@@ -119,39 +92,7 @@ export default function CarDetailPage({
       setError("Please select both start and end dates");
       return;
     }
-
-    setShowBookingSteps(true);
-  };
-
-  const handleBookingComplete = async (bookingData: BookingData) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          carId: parseInt(carId),
-          userId: userId,
-          startDate: startDate?.toISOString(),
-          endDate: endDate?.toISOString(),
-          protectionType: bookingData.protectionPackage?.name,
-          extras: bookingData.extras.map((e) => e.id),
-          totalPrice: bookingData.totalPrice,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to book car");
-      }
-
-      router.push("/profile");
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to book car");
-    }
+    router.push(`/cars/${carId}/booking?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
   };
 
   if (loading) {
@@ -180,126 +121,90 @@ export default function CarDetailPage({
     <>
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        {showBookingSteps ? (
-          <BookingSteps
-            carPrice={car?.priceForOneDay || 0}
-            startDate={startDate!}
-            endDate={endDate!}
-            onComplete={handleBookingComplete}
-            onCancel={() => setShowBookingSteps(false)}
-          />
-        ) : (
-          <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow p-4 md:p-8">
-            <h1 className="text-3xl md:text-5xl font-bold text-[#1C1F20] mb-6">
-              {car.manufacturer} {car.model}
-            </h1>
+        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow p-4 md:p-8">
+          <h1 className="text-3xl md:text-5xl font-bold text-[#1C1F20] mb-6">
+            {car.manufacturer} {car.model}
+          </h1>
 
-            {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                {error}
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">
+                Car Details
+              </h2>
+              <div className="space-y-2">
+                <p className="flex justify-between">
+                  <span className="font-medium text-xl text-[#1C1F20]">Type:</span>
+                  <span className="text-lg text-[#1C1F20]">{car.type}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="font-medium text-xl text-[#1C1F20]">Seats:</span>
+                  <span className="text-lg text-[#1C1F20]">{car.numberOfSeats}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="font-medium text-xl text-[#1C1F20]">Suitcases:</span>
+                  <span className="text-lg text-[#1C1F20]">{car.numberOfSuitcases}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="font-medium text-xl text-[#1C1F20]">Fuel Type:</span>
+                  <span className="text-lg text-[#1C1F20]">{car.fuelType}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="font-medium text-xl text-[#1C1F20]">Transmission:</span>
+                  <span className="text-lg text-[#1C1F20]">{car.clutchType}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="font-medium text-2xl text-[#1C1F20]">Price per day:</span>
+                  <span className="text-[#AA4D2B] font-bold text-2xl">
+                    {formatPrice(car.priceForOneDay)}
+                  </span>
+                </p>
               </div>
-            )}
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">Book Now</h2>
               <div className="space-y-4">
-                <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">
-                  Car Details
-                </h2>
-                <div className="space-y-2">
-                  <p className="flex justify-between">
-                    <span className="font-medium text-xl text-[#1C1F20]">
-                      Type:
-                    </span>
-                    <span className="text-lg text-[#1C1F20]">{car.type}</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span className="font-medium text-xl text-[#1C1F20]">
-                      Seats:
-                    </span>
-                    <span className="text-lg text-[#1C1F20]">
-                      {car.numberOfSeats}
-                    </span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span className="font-medium text-xl text-[#1C1F20]">
-                      Suitcases:
-                    </span>
-                    <span className="text-lg text-[#1C1F20]">
-                      {car.numberOfSuitcases}
-                    </span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span className="font-medium text-xl text-[#1C1F20]">
-                      Fuel Type:
-                    </span>
-                    <span className="text-lg text-[#1C1F20]">
-                      {car.fuelType}
-                    </span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span className="font-medium text-xl text-[#1C1F20]">
-                      Transmission:
-                    </span>
-                    <span className="text-lg text-[#1C1F20]">
-                      {car.clutchType}
-                    </span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span className="font-medium text-2xl text-[#1C1F20]">
-                      Price per day:
-                    </span>
-                    <span className="text-[#AA4D2B] font-bold text-2xl">
-                      {car && formatPrice(car.priceForOneDay)}
-                    </span>
-                  </p>
+                <div>
+                  <label className="block text-text-[#1C1F20] text-xl mb-2">Start Date</label>
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    minDate={new Date()}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
+                    placeholderText="Select start date"
+                  />
                 </div>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">
-                  Book Now
-                </h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-text-[#1C1F20] text-xl mb-2">
-                      Start Date
-                    </label>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      minDate={new Date()}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
-                      placeholderText="Select start date"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-text-[#1C1F20] text-xl mb-2">
-                      End Date
-                    </label>
-                    <DatePicker
-                      selected={endDate}
-                      onChange={(date) => setEndDate(date)}
-                      minDate={startDate || new Date()}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
-                      placeholderText="Select end date"
-                    />
-                  </div>
-                  <button
-                    onClick={handleBook}
-                    disabled={!car.isAvailable}
-                    className={`w-full py-2.5 px-4 rounded-xl text-white font-medium text-lg ${
-                      car.isAvailable
-                        ? "bg-[#AA4D2B] hover:bg-[#943f21] hover:ring-1 hover:ring-[#943f21] transition-all"
-                        : "bg-gray-400 cursor-not-allowed"
-                    }`}
-                  >
-                    {car.isAvailable ? "Continue to Book" : "Not Available"}
-                  </button>
+                <div>
+                  <label className="block text-text-[#1C1F20] text-xl mb-2">End Date</label>
+                  <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    minDate={startDate || new Date()}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
+                    placeholderText="Select end date"
+                  />
                 </div>
+                <button
+                  onClick={handleBook}
+                  disabled={!car.isAvailable}
+                  className={`w-full py-2.5 px-4 rounded-xl text-white font-medium text-lg ${
+                    car.isAvailable
+                      ? "bg-[#AA4D2B] hover:bg-[#943f21] hover:ring-1 hover:ring-[#943f21] transition-all"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  {car.isAvailable ? "Continue to Book" : "Not Available"}
+                </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </>
   );

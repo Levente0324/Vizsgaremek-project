@@ -7,7 +7,7 @@
 ✅ reviews (maga az oldalhoz)
 ✅ credit card regex
 
-about us page 
+✅ about us page 
 price filter
 
 // bonusz
