@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar";
 import DatePicker from "react-datepicker";
@@ -168,39 +169,57 @@ export default function CarDetailPage({
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">Book Now</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-text-[#1C1F20] text-xl mb-2">Start Date</label>
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    minDate={new Date()}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
-                    placeholderText="Select start date"
-                  />
+              <Image src={`/${carId}.png`} width={500} height={300} className="" alt="Car" />
+            </div>
+
+            <div className="col-span-1 md:col-span-2 w-full border-t-[1px] border-black">
+              <div className="space-y-6 max-w-2xl mx-auto mt-4">
+                <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20] text-center">
+                  Book Now
+                </h2>
+                <div className="space-y-4 w-full">
+                  <div className="w-full"> 
+                      <label className="block text-[#1C1F20] text-xl tetx-center mb-2 ">
+                        Start Date
+                      </label>
+                    <div className="flex justify-center">
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        minDate={new Date()}
+                        className="w-full md:w-[400px] px-6 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg"
+                        placeholderText="Select start date"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <label className="block text-[#1C1F20] text-xl mb-2 text-center">
+                      End Date
+                    </label>
+                    <div className="flex justify-center">
+                      <DatePicker
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        minDate={startDate || new Date()}
+                        className="w-full md:w-[400px] px-6 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg"
+                        placeholderText="Select end date"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={handleBook}
+                      disabled={!car.isAvailable}
+                      className={`w-full md:w-[400px] py-3 px-4 rounded-xl text-white font-medium text-lg ${
+                        car.isAvailable
+                          ? "bg-[#AA4D2B] hover:bg-[#943f21] hover:ring-1 hover:ring-[#943f21] transition-all"
+                          : "bg-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      {car.isAvailable ? "Continue to Book" : "Not Available"}
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-text-[#1C1F20] text-xl mb-2">End Date</label>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    minDate={startDate || new Date()}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default"
-                    placeholderText="Select end date"
-                  />
-                </div>
-                <button
-                  onClick={handleBook}
-                  disabled={!car.isAvailable}
-                  className={`w-full py-2.5 px-4 rounded-xl text-white font-medium text-lg ${
-                    car.isAvailable
-                      ? "bg-[#AA4D2B] hover:bg-[#943f21] hover:ring-1 hover:ring-[#943f21] transition-all"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  {car.isAvailable ? "Continue to Book" : "Not Available"}
-                </button>
               </div>
             </div>
           </div>

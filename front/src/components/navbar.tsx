@@ -5,6 +5,7 @@ import { COLORS, TRANSITIONS, ROUNDED, SHADOWS } from "@/utils/styles";
 
 const Navbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [currency, setCurrency] = useState("HUF");
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -13,6 +14,26 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
+
+    const checkAdminStatus = async () => {
+      if (token) {
+        try {
+          const response = await fetch("http://localhost:3000/auth/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (response.ok) {
+            const userData = await response.json();
+            setIsAdmin(userData.isAdmin);
+          }
+        } catch (error) {
+          console.error("Error checking admin status:", error);
+        }
+      }
+    };
+
+    checkAdminStatus();
 
     const savedCurrency = localStorage.getItem("currency") || "HUF";
     setCurrency(savedCurrency);
@@ -72,6 +93,14 @@ const Navbar: React.FC = () => {
       </Link>
 
       <div className="flex flex-col md:flex-row items-center w-full md:w-auto gap-4 md:gap-8">
+        {isLoggedIn && isAdmin && (
+          <Link href="/admin" className="w-full sm:w-auto">
+            <button className="px-2 bg-transparent text-black text-xl font-medium rounded-lg hover:text-[#943f21] cursor-pointer hover:underline underline-offset-4 transition-all duration-200">
+              Admin Page
+            </button>
+          </Link>
+        )}
+
         <select
           value={currency}
           onChange={(e) => handleCurrencyChange(e.target.value)}

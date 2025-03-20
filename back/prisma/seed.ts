@@ -3,6 +3,19 @@ import { faker } from '@faker-js/faker';
 import * as argon2 from 'argon2';
 const prisma = new PrismaClient();
 
+async function cleanDatabase() {
+  // Delete all records in reverse order of dependencies
+  await prisma.extraOnBookings.deleteMany({});
+  await prisma.protection.deleteMany({});
+  await prisma.booking.deleteMany({});
+  await prisma.extra.deleteMany({});
+  await prisma.token.deleteMany({});
+  await prisma.user.deleteMany({});
+  await prisma.car.deleteMany({});
+  
+  console.log('Database cleaned');
+}
+
 async function seedCars() {
   await prisma.car.createMany({
     data: [
@@ -463,6 +476,10 @@ async function seedProtections() {
 
 async function main() {
   try {
+    // First clean the database
+    await cleanDatabase();
+
+    // Then seed with fresh data
     await seedCars();
     await seedExtras();
     await seedProtections();
@@ -526,15 +543,21 @@ async function main() {
       });
 
       const numberOfExtras = faker.number.int({ min: 0, max: 2 });
+      const selectedExtras = new Set();
       for (let j = 0; j < numberOfExtras; j++) {
-        const randomExtra =
-          extras[faker.number.int({ min: 0, max: extras.length - 1 })];
-        await prisma.extraOnBookings.create({
-          data: {
-            bookingId: booking.id,
-            extraId: randomExtra.id,
-          },
-        });
+        const randomIndex = faker.number.int({ min: 0, max: extras.length - 1 });
+        const randomExtra = extras[randomIndex];
+        
+        // Only create if this extra hasn't been added yet
+        if (!selectedExtras.has(randomExtra.id)) {
+          selectedExtras.add(randomExtra.id);
+          await prisma.extraOnBookings.create({
+            data: {
+              bookingId: booking.id,
+              extraId: randomExtra.id,
+            },
+          });
+        }
       }
 
       console.log(
@@ -545,6 +568,7 @@ async function main() {
     console.log('Database seeding completed successfully!');
   } catch (error) {
     console.error('Error during seeding:', error);
+    throw error; // Re-throw to trigger the error handling in the catch block below
   }
 }
 
