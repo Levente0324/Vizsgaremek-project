@@ -9,53 +9,86 @@ export class BookingService {
 
   async create(createBookingDto: CreateBookingDto) {
     try {
-      const booking = await this.db.booking.create({
+      // First verify that all extras exist
+      if (createBookingDto.extras?.length) {
+        const existingExtras = await this.db.extra.findMany({
+          where: {
+            id: {
+              in: createBookingDto.extras.map(id => parseInt(id))
+            }
+          }
+        });
+
+        if (existingExtras.length !== createBookingDto.extras.length) {
+          throw new Error('One or more selected extras do not exist');
+        }
+
+        // Then create the booking
+        const booking = await this.db.booking.create({
+          data: {
+            carId: createBookingDto.carId,
+            userId: createBookingDto.userId,
+            startDate: new Date(createBookingDto.startDate),
+            endDate: new Date(createBookingDto.endDate),
+            totalPrice: createBookingDto.totalPrice,
+            protection: createBookingDto.protectionType ? {
+              create: {
+                name: createBookingDto.protectionType,
+                price: 0,
+                description: '',
+              }
+            } : undefined,
+            extras: {
+              create: createBookingDto.extras.map(extraId => ({
+                extra: {
+                  connect: { 
+                    id: parseInt(extraId)
+                  }
+                }
+              }))
+            }
+          },
+          include: {
+            car: true,
+            protection: true,
+            extras: {
+              include: {
+                extra: true
+              }
+            }
+          }
+        });
+
+        return booking;
+      }
+
+      // Create booking without extras
+      return await this.db.booking.create({
         data: {
           carId: createBookingDto.carId,
           userId: createBookingDto.userId,
           startDate: new Date(createBookingDto.startDate),
           endDate: new Date(createBookingDto.endDate),
           totalPrice: createBookingDto.totalPrice,
-          protection: createBookingDto.protectionType
-            ? {
-                create: {
-                  name: createBookingDto.protectionType,
-                  price: 0,
-                  description: '',
-                },
-              }
-            : undefined,
-          extras: createBookingDto.extras?.length
-            ? {
-                create: createBookingDto.extras
-                  .map((extraId) => {
-                    const parsedId = parseInt(extraId);
-                    return isNaN(parsedId)
-                      ? null
-                      : {
-                          extra: {
-                            connect: {
-                              id: parsedId,
-                            },
-                          },
-                        };
-                  })
-                  .filter(Boolean),
-              }
-            : undefined,
+          protection: createBookingDto.protectionType ? {
+            create: {
+              name: createBookingDto.protectionType,
+              price: 0,
+              description: '',
+            }
+          } : undefined
         },
         include: {
           car: true,
           protection: true,
           extras: {
             include: {
-              extra: true,
-            },
-          },
-        },
+              extra: true
+            }
+          }
+        }
       });
 
-      return booking;
     } catch (error) {
       console.error('Error creating booking:', error);
       throw error;

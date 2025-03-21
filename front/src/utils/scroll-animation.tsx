@@ -28,7 +28,7 @@ export const ScrollAnimation: React.FC<ScrollAnimationProps> = ({
 }) => {
   const controls = useAnimation();
   const ref = useRef(null);
-  const inView = useInView(ref, { threshold, once });
+  const inView = useInView(ref, { amount: threshold, once });
 
   let initial = {};
   let animate = {};
