@@ -1,12 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
-import { useRouter } from "next/navigation";
-import Navbar from "@/components/navbar";
-import { formatPrice, formatPriceSync } from "@/utils/currency";
-import { use } from "react";
-=======
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Navbar from "@/components/navbar";
 import { formatPrice } from "@/utils/currency";
@@ -40,8 +34,6 @@ interface Extra {
   description: string;
 }
 
-<<<<<<< HEAD
-=======
 interface PaymentDetails {
   cardNumber: string;
   cardHolder: string;
@@ -62,7 +54,7 @@ interface Car {
   isAvailable: boolean;
 }
 
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
+
 const PROTECTION_PACKAGES: Protection[] = [
   {
     name: "Basic",
@@ -88,31 +80,13 @@ const PROTECTION_PACKAGES: Protection[] = [
 
 const EXTRA_SERVICES: Extra[] = [
   {
-<<<<<<< HEAD
-    id: "gps",
-=======
     id: "1",
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
     name: "GPS Navigation",
     price: 2000,
     description: "Built-in GPS navigation system",
   },
   {
-<<<<<<< HEAD
-    id: "childSeat",
-    name: "Child Seat",
-    price: 3000,
-    description: "Safety-certified child seat",
-  },
-  {
-    id: "wifi",
-    name: "Mobile WiFi",
-    price: 1500,
-    description: "Portable WiFi hotspot",
-  },
-  {
-    id: "additionalDriver",
-=======
+
     id: "2",
     name: "Child Seat",
     price: 3000,
@@ -120,25 +94,10 @@ const EXTRA_SERVICES: Extra[] = [
   },
   {
     id: "3",
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
     name: "Additional Driver",
     price: 5000,
     description: "Register an additional driver",
   },
-<<<<<<< HEAD
-];
-
-const formatCardNumber = (value: string): string => {
-  return value.replace(/\D/g, "").slice(0, 16);
-};
-
-const formatExpiryDate = (value: string): string => {
-  value = value.replace(/\D/g, "");
-  if (value.length >= 2) {
-    return `${value.slice(0, 2)}/${value.slice(2)}`;
-  }
-  return value;
-=======
   {
     id: "4",
     name: "Airport Pickup",
@@ -158,7 +117,6 @@ const formatExpiryDate = (value: string): string => {
     return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}`;
   }
   return numbers;
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
 };
 
 const isValidName = (name: string): boolean => {
@@ -168,30 +126,6 @@ const isValidName = (name: string): boolean => {
 const isValidExpiryDate = (date: string): boolean => {
   if (!/^\d{2}\/\d{2}$/.test(date)) return false;
 
-<<<<<<< HEAD
-  const [month, year] = date.split("/").map(Number);
-  const now = new Date();
-  const expiry = new Date(2000 + year, month - 1);
-
-  return month >= 1 && month <= 12 && expiry > now;
-};
-
-export default function BookingPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const resolvedParams = use(params);
-  const carId = resolvedParams.id;
-  const router = useRouter();
-
-  const [car, setCar] = useState<any>(null);
-  const [step, setStep] = useState(1);
-  const [selectedProtection, setSelectedProtection] =
-    useState<Protection | null>(null);
-  const [selectedExtras, setSelectedExtras] = useState<Extra[]>([]);
-  const [paymentDetails, setPaymentDetails] = useState({
-=======
   const [month, year] = date.split("/").map((num) => parseInt(num));
   const currentYear = new Date().getFullYear() % 100;
 
@@ -213,26 +147,14 @@ export default function BookingPage() {
   const [selectedProtection, setSelectedProtection] = useState<Protection | null>(null);
   const [selectedExtras, setSelectedExtras] = useState<Extra[]>([]);
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
+
     cardNumber: "",
     cardHolder: "",
     expiryDate: "",
     cvv: "",
   });
   const [error, setError] = useState("");
-<<<<<<< HEAD
-  const [loading, setLoading] = useState(true);
 
-  // Calculate rental days
-  const startDate = new Date(localStorage.getItem("startDate") || "");
-  const endDate = new Date(localStorage.getItem("endDate") || "");
-  const rentalDays = Math.ceil(
-    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  const calculateTotal = () => {
-    if (!car) return 0;
-=======
   const [userId, setUserId] = useState<number | null>(null);
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
@@ -275,7 +197,7 @@ export default function BookingPage() {
   const calculateTotal = () => {
     if (!car || !rentalDays) return 0;
     
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
+
     const basePrice = car.priceForOneDay * rentalDays;
     const protectionPrice = selectedProtection?.price || 0;
     const extrasTotal = selectedExtras.reduce(
@@ -285,128 +207,39 @@ export default function BookingPage() {
     return basePrice + protectionPrice + extrasTotal;
   };
 
-<<<<<<< HEAD
-  const [prices, setPrices] = useState({
-    basePrice: "",
-    total: "",
-  });
 
-  useEffect(() => {
-    const fetchCar = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/cars/${carId}`);
-        const data = await response.json();
-        setCar(data);
-        setPrices({
-          basePrice: formatPriceSync(data.priceForOneDay * rentalDays),
-          total: formatPriceSync(data.priceForOneDay * rentalDays),
-        });
-        setLoading(false);
-      } catch (error) {
-        console.error("Error:", error);
-        setError("Failed to load car data");
-        setLoading(false);
-      }
-    };
-
-    fetchCar();
-  }, [carId, rentalDays]);
-
-  useEffect(() => {
-    const updatePrices = async () => {
-      if (!car) return;
-      const total = calculateTotal();
-      setPrices({
-        basePrice: await formatPrice(car.priceForOneDay * rentalDays),
-        total: await formatPrice(total),
-      });
-    };
-
-    const handleCurrencyChange = () => updatePrices();
-    updatePrices();
-
-    window.addEventListener("storage", handleCurrencyChange);
-    window.addEventListener("rateUpdate", handleCurrencyChange);
-
-    return () => {
-      window.removeEventListener("storage", handleCurrencyChange);
-      window.removeEventListener("rateUpdate", handleCurrencyChange);
-    };
-  }, [car, rentalDays, selectedProtection, selectedExtras]);
-
-=======
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
   const validateCard = () => {
     if (paymentDetails.cardNumber.length !== 16) {
       setError("Card number must be 16 digits");
       return false;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
     if (!isValidName(paymentDetails.cardHolder)) {
       setError(
         "Card holder name must be at least 3 letters and contain only letters and spaces"
       );
       return false;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
     if (paymentDetails.cvv.length !== 3) {
       setError("CVV must be 3 digits");
       return false;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
     if (!isValidExpiryDate(paymentDetails.expiryDate)) {
       setError(
         "Invalid expiry date. Must be MM/YY format and date must be in the future"
       );
       return false;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
     setError("");
     return true;
   };
 
   const handleSubmit = async () => {
     if (!validateCard()) return;
-<<<<<<< HEAD
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        router.push("/sign-in");
-        return;
-      }
-
-      // First get the user profile to ensure we have the userId
-      const profileResponse = await fetch(
-        "http://localhost:3000/auth/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!profileResponse.ok) {
-        throw new Error("Failed to get user profile");
-      }
-
-      const userData = await profileResponse.json();
-      const userId = userData.id;
-
-      // Now make the booking request with userId
-=======
     
     const total = calculateTotal();
     if (!total || isNaN(total)) {
@@ -416,7 +249,7 @@ export default function BookingPage() {
 
     try {
       const token = localStorage.getItem("token");
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
+
       const response = await fetch("http://localhost:3000/bookings", {
         method: "POST",
         headers: {
@@ -424,15 +257,7 @@ export default function BookingPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-<<<<<<< HEAD
-          userId: userId, // Add userId here
-          carId: parseInt(carId),
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString(),
-          protectionType: selectedProtection?.name,
-          extras: selectedExtras.map((e) => e.id),
-          totalPrice: calculateTotal(),
-=======
+
           carId: parseInt(carId),
           userId: userId,
           startDate: startDate?.toISOString(),
@@ -440,7 +265,7 @@ export default function BookingPage() {
           protectionType: selectedProtection?.name,
           extras: selectedExtras.map((e) => e.id),
           totalPrice: total,
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
+
         }),
       });
 
@@ -470,175 +295,7 @@ export default function BookingPage() {
     <>
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-<<<<<<< HEAD
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            {/* Steps indicator */}
-            <div className="flex justify-between mb-8">
-              {[1, 2, 3].map((number) => (
-                <div
-                  key={number}
-                  className={`w-20 flex flex-col items-center ${
-                    step === number ? "text-[#AA4D2B]" : "text-gray-400"
-                  }`}
-                >
-                  <div
-                    className={`w-8 h-8 rounded-full text-lg flex items-center justify-center mb-2 ${
-                      step === number
-                        ? "bg-[#AA4D2B] text-white"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
-                  >
-                    {number}
-                  </div>
-                  <span className="text-base">
-                    {number === 1
-                      ? "Protection"
-                      : number === 2
-                      ? "Extras"
-                      : "Payment"}
-                  </span>
-                </div>
-              ))}
-            </div>
 
-            {/* Step 1: Protection Selection */}
-            {step === 1 && (
-              <div className="space-y-6">
-                <h2 className="text-3xl font-medium text-[#1C1F20]">
-                  Choose Protection Package
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {PROTECTION_PACKAGES.map((pkg) => (
-                    <div
-                      key={pkg.name}
-                      className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
-                        selectedProtection?.name === pkg.name
-                          ? "border-[#AA4D2B] bg-[#ffebe5]"
-                          : "border-gray-200 hover:border-[#AA4D2B]"
-                      }`}
-                      onClick={() => setSelectedProtection(pkg)}
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-medium text-2xl text-[#1C1F20]">
-                          {pkg.name}
-                        </h3>
-                        <span className="text-[#AA4D2B] text-xl font-medium">
-                          {pkg.price > 0 ? formatPriceSync(pkg.price) : "Free"}
-                        </span>
-                      </div>
-                      <p className="text-gray-600 text-base">
-                        {pkg.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-between pt-4">
-                  <button
-                    onClick={() => router.back()}
-                    className="px-6 py-2 text-xl text-gray-600 hover:text-gray-800"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => setStep(2)}
-                    disabled={!selectedProtection}
-                    className="px-6 py-2 bg-[#AA4D2B] text-white rounded-lg text-xl hover:bg-[#943f21] disabled:bg-gray-300 disabled:cursor-not-allowed"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Step 2: Extras Selection */}
-            {step === 2 && (
-              <div className="space-y-6">
-                <h2 className="text-3xl font-medium text-[#1C1F20]">
-                  Select Extra Services
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {EXTRA_SERVICES.map((service) => (
-                    <div
-                      key={service.id}
-                      className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
-                        selectedExtras.some((e) => e.id === service.id)
-                          ? "border-[#AA4D2B] bg-[#ffebe5]"
-                          : "border-gray-200 hover:border-[#AA4D2B]"
-                      }`}
-                      onClick={() => {
-                        setSelectedExtras((prev) =>
-                          prev.some((e) => e.id === service.id)
-                            ? prev.filter((e) => e.id !== service.id)
-                            : [...prev, service]
-                        );
-                      }}
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-medium text-2xl text-[#1C1F20]">
-                          {service.name}
-                        </h3>
-                        <span className="text-[#AA4D2B] font-medium text-xl">
-                          {formatPriceSync(service.price)}
-                        </span>
-                      </div>
-                      <p className="text-gray-600 text-base">
-                        {service.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-between pt-4">
-                  <button
-                    onClick={() => setStep(1)}
-                    className="px-6 py-2 text-xl text-gray-600 hover:text-gray-800"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={() => setStep(3)}
-                    className="px-6 py-2 bg-[#AA4D2B] text-white text-xl rounded-lg hover:bg-[#943f21]"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Step 3: Payment */}
-            {step === 3 && (
-              <div className="space-y-6">
-                <h2 className="text-3xl font-medium text-[#1C1F20]">
-                  Payment Details
-                </h2>
-                {error && (
-                  <div className="bg-red-100 text-red-700 p-3 rounded-lg">
-                    {error}
-                  </div>
-                )}
-                <div className="grid grid-cols-1 gap-4">
-                  <div>
-                    <label className="block text-[#1C1F20] font-medium mb-1 text-lg">
-                      Card Number
-                    </label>
-                    <input
-                      type="text"
-                      maxLength={16}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AA4D2B]"
-                      value={paymentDetails.cardNumber}
-                      onChange={(e) =>
-                        setPaymentDetails((prev) => ({
-                          ...prev,
-                          cardNumber: formatCardNumber(e.target.value),
-                        }))
-                      }
-                      placeholder="1234567890123456"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[#1C1F20] font-medium mb-1 text-lg">
-                      Card Holder
-=======
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <div className="flex justify-between mb-8">
             {[1, 2, 3].map((number) => (
@@ -817,118 +474,12 @@ export default function BookingPage() {
                   <div>
                     <label className="block text-[#1C1F20] font-medium mb-1 text-lg">
                       Expiry Date
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
+
                     </label>
                     <input
                       type="text"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AA4D2B]"
-<<<<<<< HEAD
-                      value={paymentDetails.cardHolder}
-                      onChange={(e) =>
-                        setPaymentDetails((prev) => ({
-                          ...prev,
-                          cardHolder: e.target.value.replace(
-                            /[^A-Za-z\s]/g,
-                            ""
-                          ),
-                        }))
-                      }
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[#1C1F20] font-medium mb-1 text-lg">
-                        Expiry Date
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AA4D2B]"
-                        value={paymentDetails.expiryDate}
-                        onChange={(e) => {
-                          const formatted = formatExpiryDate(e.target.value);
-                          if (formatted.length <= 5) {
-                            setPaymentDetails((prev) => ({
-                              ...prev,
-                              expiryDate: formatted,
-                            }));
-                          }
-                        }}
-                        placeholder="MM/YY"
-                        maxLength={5}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[#1C1F20] font-medium mb-1 text-lg">
-                        CVV
-                      </label>
-                      <input
-                        type="text"
-                        maxLength={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AA4D2B]"
-                        value={paymentDetails.cvv}
-                        onChange={(e) =>
-                          setPaymentDetails((prev) => ({
-                            ...prev,
-                            cvv: e.target.value.replace(/\D/g, "").slice(0, 3),
-                          }))
-                        }
-                        placeholder="123"
-                      />
-                    </div>
-                  </div>
-                </div>
 
-                <div className="border-t pt-4 mt-6">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-[#1C1F20] text-lg">
-                      <span>Base Price ({rentalDays} days)</span>
-                      <span>{prices.basePrice}</span>
-                    </div>
-                    {selectedProtection && selectedProtection.price > 0 && (
-                      <div className="flex justify-between text-[#1C1F20] text-base">
-                        <span>Protection Package</span>
-                        <span>{formatPriceSync(selectedProtection.price)}</span>
-                      </div>
-                    )}
-                    {selectedExtras.length > 0 && (
-                      <div className="space-y-1">
-                        {selectedExtras.map((extra) => (
-                          <div
-                            key={extra.id}
-                            className="flex justify-between text-[#1C1F20]"
-                          >
-                            <span>{extra.name}</span>
-                            <span>{formatPriceSync(extra.price)}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex justify-between text-2xl font-semibold text-[#1C1F20] pt-2 border-t">
-                      <span>Total</span>
-                      <span className="text-[#AA4D2B]">{prices.total}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-between pt-4">
-                  <button
-                    onClick={() => setStep(2)}
-                    className="px-6 py-2 text-xl text-gray-600 hover:text-gray-800"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={handleSubmit}
-                    className="px-6 py-2 text-xl bg-[#AA4D2B] text-white rounded-lg hover:bg-[#943f21]"
-                  >
-                    Complete Booking
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-=======
                       value={paymentDetails.expiryDate}
                       onChange={(e) => {
                         const formatted = formatExpiryDate(e.target.value);
@@ -1014,7 +565,7 @@ export default function BookingPage() {
               </div>
             </div>
           )}
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
+
         </div>
       </div>
     </>
