@@ -19,7 +19,6 @@ interface BookingData {
   paymentDetails: PaymentDetails;
   totalPrice: number;
 }
->>>>>>> 857e05b5be0f14406dc7492516f00c9ecad19f8f
 
 interface Protection {
   name: string;
@@ -54,7 +53,6 @@ interface Car {
   isAvailable: boolean;
 }
 
-
 const PROTECTION_PACKAGES: Protection[] = [
   {
     name: "Basic",
@@ -86,7 +84,6 @@ const EXTRA_SERVICES: Extra[] = [
     description: "Built-in GPS navigation system",
   },
   {
-
     id: "2",
     name: "Child Seat",
     price: 3000,
@@ -144,10 +141,10 @@ export default function BookingPage() {
   const params = useParams();
   const carId = params.id as string;
   const [step, setStep] = useState(1);
-  const [selectedProtection, setSelectedProtection] = useState<Protection | null>(null);
+  const [selectedProtection, setSelectedProtection] =
+    useState<Protection | null>(null);
   const [selectedExtras, setSelectedExtras] = useState<Extra[]>([]);
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({
-
     cardNumber: "",
     cardHolder: "",
     expiryDate: "",
@@ -159,8 +156,12 @@ export default function BookingPage() {
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const startDate = searchParams.get('startDate') ? new Date(searchParams.get('startDate')!) : null;
-  const endDate = searchParams.get('endDate') ? new Date(searchParams.get('endDate')!) : null;
+  const startDate = searchParams.get("startDate")
+    ? new Date(searchParams.get("startDate")!)
+    : null;
+  const endDate = searchParams.get("endDate")
+    ? new Date(searchParams.get("endDate")!)
+    : null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,11 +172,14 @@ export default function BookingPage() {
 
         const token = localStorage.getItem("token");
         if (token) {
-          const userResponse = await fetch("http://localhost:3000/auth/profile", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const userResponse = await fetch(
+            "http://localhost:3000/auth/profile",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           const userData = await userResponse.json();
           setUserId(userData.id);
         }
@@ -190,13 +194,15 @@ export default function BookingPage() {
     fetchData();
   }, [carId]);
 
-  const rentalDays = startDate && endDate 
-    ? Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
-    : 0;
+  const rentalDays =
+    startDate && endDate
+      ? Math.ceil(
+          (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+        )
+      : 0;
 
   const calculateTotal = () => {
     if (!car || !rentalDays) return 0;
-    
 
     const basePrice = car.priceForOneDay * rentalDays;
     const protectionPrice = selectedProtection?.price || 0;
@@ -206,7 +212,6 @@ export default function BookingPage() {
     );
     return basePrice + protectionPrice + extrasTotal;
   };
-
 
   const validateCard = () => {
     if (paymentDetails.cardNumber.length !== 16) {
@@ -240,7 +245,6 @@ export default function BookingPage() {
   const handleSubmit = async () => {
     if (!validateCard()) return;
 
-    
     const total = calculateTotal();
     if (!total || isNaN(total)) {
       setError("Invalid total price calculation");
@@ -257,7 +261,6 @@ export default function BookingPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-
           carId: parseInt(carId),
           userId: userId,
           startDate: startDate?.toISOString(),
@@ -265,7 +268,6 @@ export default function BookingPage() {
           protectionType: selectedProtection?.name,
           extras: selectedExtras.map((e) => e.id),
           totalPrice: total,
-
         }),
       });
 
@@ -295,7 +297,6 @@ export default function BookingPage() {
     <>
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <div className="flex justify-between mb-8">
             {[1, 2, 3].map((number) => (
@@ -474,12 +475,10 @@ export default function BookingPage() {
                   <div>
                     <label className="block text-[#1C1F20] font-medium mb-1 text-lg">
                       Expiry Date
-
                     </label>
                     <input
                       type="text"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AA4D2B]"
-
                       value={paymentDetails.expiryDate}
                       onChange={(e) => {
                         const formatted = formatExpiryDate(e.target.value);
@@ -519,7 +518,9 @@ export default function BookingPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-[#1C1F20] text-lg">
                     <span>Base Price ({rentalDays} days)</span>
-                    <span>{car ? formatPrice(car.priceForOneDay * rentalDays) : '-'}</span>
+                    <span>
+                      {car ? formatPrice(car.priceForOneDay * rentalDays) : "-"}
+                    </span>
                   </div>
                   {selectedProtection && selectedProtection.price > 0 && (
                     <div className="flex justify-between text-[#1C1F20] text-base">
@@ -565,7 +566,6 @@ export default function BookingPage() {
               </div>
             </div>
           )}
-
         </div>
       </div>
     </>
