@@ -14,6 +14,7 @@ import { useEffect, useState, useRef } from "react";
 import { AnimationWrapper } from "@/utils/animations";
 import { ScrollAnimation } from "@/utils/scroll-animation";
 import { motion } from "framer-motion";
+import Location from "@/components/location";
 
 interface CarType {
   id: number;
@@ -158,6 +159,12 @@ export default function Home() {
       <ScrollAnimation type="bounce" delay={0.2}>
         <div className="max-w-[1400px] mx-auto">
           <Aboutus />
+        </div>
+      </ScrollAnimation>
+
+      <ScrollAnimation type="slide-up" delay={0.2}>
+        <div className="max-w-[1400px] mx-auto">
+          <Location />
         </div>
       </ScrollAnimation>
 

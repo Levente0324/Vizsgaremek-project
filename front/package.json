@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@types/react-datepicker": "^7.0.0",
     "framer-motion": "^12.4.7",
     "next": "15.1.7",

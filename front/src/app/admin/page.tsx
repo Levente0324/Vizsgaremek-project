@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  Button,
+  Dialog,
+  DialogPanel,
+  DialogBackdrop,
+  DialogTitle,
+} from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar";
@@ -34,7 +41,7 @@ export default function AdminPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    "cars" | "users" | "bookings" | "create"
+    "cars" | "users" | "bookings" | "create" | "insight"
   >("cars");
   const [createType, setCreateType] = useState<"car" | "user" | null>(null);
   const [newCar, setNewCar] = useState({
@@ -53,6 +60,10 @@ export default function AdminPage() {
     password: "",
     isAdmin: false,
   });
+  const [error, setError] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [saleAmount, setSaleAmount] = useState(0);
+  const [openCarId, setOpenCarId] = useState<number | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -137,6 +148,39 @@ export default function AdminPage() {
     }
   };
 
+  const handleSale = async (id: number, amount: number) => {
+    const token = localStorage.getItem("token");
+    const car = cars.find((car) => car.id === id);
+    if (!car) {
+      console.error("Car not found");
+      return;
+    }
+
+    const newPrice = car.priceForOneDay * (1 - amount / 100);
+    try {
+      const response = await fetch(`http://localhost:3000/cars/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          priceForOneDay: newPrice,
+        }),
+      });
+
+      if (response.ok) {
+        setOpenCarId(null);
+        setSaleAmount(0);
+        await fetchData();
+      } else {
+        console.error("Failed to update price");
+      }
+    } catch (error) {
+      console.error(`Error updating price:`, error);
+    }
+  };
+
   const handleCreateCar = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -193,6 +237,9 @@ export default function AdminPage() {
           password: "",
           isAdmin: false,
         });
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message[0]);
       }
     } catch (error) {
       console.error("Error creating user:", error);
@@ -213,7 +260,7 @@ export default function AdminPage() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 py-2">
         <h1 className="text-4xl font-bold text-center mb-8 text-[#1C1F20]">
           Admin Dashboard
         </h1>
@@ -263,9 +310,20 @@ export default function AdminPage() {
           >
             Create
           </button>
+          <button
+            onClick={() => setActiveTab("insight")}
+            className={`px-6 py-2 rounded-lg text-lg font-medium transition-all duration-200 
+              ${
+                activeTab === "insight"
+                  ? "bg-[#AA4D2B] text-white"
+                  : "bg-white text-[#AA4D2B] hover:bg-[#AA4D2B]/10"
+              }`}
+          >
+            Insight
+          </button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white rounded-xl shadow-lg p-4">
           {activeTab === "cars" && (
             <div className="overflow-x-auto">
               <table className="min-w-full">
@@ -301,7 +359,7 @@ export default function AdminPage() {
                       <td className="px-6 py-4 text-black">
                         {car.manufacturer}
                       </td>
-                      <td className="px-6 py-4 text-black">{car.model}</td>
+                      <td className="px-4 py-4 text-black">{car.model}</td>
                       <td className="px-6 py-4 text-black">{car.type}</td>
                       <td className="px-6 py-4 text-black">
                         {car.priceForOneDay}
@@ -317,13 +375,78 @@ export default function AdminPage() {
                           {car.isAvailable ? "Available" : "Unavailable"}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="py-2 flex flex-row justify-center items-center gap-4">
                         <button
                           onClick={() => handleDelete("cars", car.id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="bg-red-50 text-red-800 hover:bg-red-100 w-20 h-10 rounded-xl"
                         >
                           Delete
                         </button>
+                        <button
+                          onClick={() => setOpenCarId(car.id)}
+                          className="bg-orange-50 text-orange-800 hover:bg-orange-100 w-16 h-10 rounded-xl"
+                        >
+                          Sale
+                        </button>
+                        <Dialog
+                          open={openCarId === car.id}
+                          as="div"
+                          className="relative z-10"
+                          onClose={() => setOpenCarId(null)}
+                        >
+                          <DialogBackdrop className="fixed inset-0 bg-black/10 opacity-10" />
+                          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                            <div className="flex min-h-full items-center justify-center p-4">
+                              <DialogPanel
+                                transition
+                                className="w-full max-w-md rounded-xl p-6 backdrop-blur-2xl bg-white border-2 border-gray-300"
+                              >
+                                <DialogTitle
+                                  as="h1"
+                                  className="text-3xl font-medium text-black text-center mb-2"
+                                >
+                                  SALE (%)
+                                </DialogTitle>
+                                <p className="mt-2 mb-2 ml-1 text-base text-black">
+                                  Please select how much you want to discount
+                                  the car price:
+                                </p>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  placeholder="Sale amount (%)"
+                                  className="w-full px-2 py-2 border rounded-lg"
+                                  onChange={(e) => {
+                                    const value = Math.min(
+                                      Math.max(
+                                        parseInt(e.target.value) || 0,
+                                        0
+                                      ),
+                                      100
+                                    );
+                                    setSaleAmount(value);
+                                  }}
+                                />
+                                <div className="mt-4">
+                                  <Button
+                                    className="inline-flex rounded-md bg-green-200 py-2 px-4 text-lg font-semibold text-green-800 hover:bg-green-300 hover:ring-1 ring-green-300 transition-all"
+                                    onClick={() =>
+                                      handleSale(car.id, saleAmount)
+                                    }
+                                    disabled={
+                                      !saleAmount ||
+                                      saleAmount <= 0 ||
+                                      saleAmount > 100
+                                    }
+                                  >
+                                    CONFIRM
+                                  </Button>
+                                </div>
+                              </DialogPanel>
+                            </div>
+                          </div>
+                        </Dialog>
                       </td>
                     </tr>
                   ))}
@@ -367,10 +490,10 @@ export default function AdminPage() {
                           {user.isAdmin ? "Admin" : "User"}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-1">
                         <button
                           onClick={() => handleDelete("users", user.id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="bg-red-50 text-red-800 hover:bg-red-100 w-20 h-10 rounded-xl"
                         >
                           Delete
                         </button>
@@ -425,10 +548,10 @@ export default function AdminPage() {
                       <td className="px-6 py-4 text-black">
                         {booking.totalPrice}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-1">
                         <button
                           onClick={() => handleDelete("bookings", booking.id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="bg-red-50 text-red-800 hover:bg-red-100 w-20 h-10 rounded-xl"
                         >
                           Delete
                         </button>
@@ -567,56 +690,134 @@ export default function AdminPage() {
                     </div>
                   </form>
                 ) : (
-                  <form
-                    onSubmit={handleCreateUser}
-                    className="max-w-md mx-auto space-y-4"
-                  >
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      value={newUser.email}
-                      onChange={(e) =>
-                        setNewUser({ ...newUser, email: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border rounded-lg"
-                    />
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      value={newUser.password}
-                      onChange={(e) =>
-                        setNewUser({ ...newUser, password: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border rounded-lg"
-                    />
-                    <div className="flex items-center space-x-2">
+                  <>
+                    {error !== "" && (
+                      <div className="text-red-700 max-w-md mx-auto pl-3 bg-red-100 text-base rounded-md ring-1 ring-red-200 h-10 font-medium flex place-items-center">
+                        {error}!
+                      </div>
+                    )}
+
+                    <form
+                      onSubmit={handleCreateUser}
+                      className="max-w-md mx-auto space-y-4"
+                    >
                       <input
-                        type="checkbox"
-                        checked={newUser.isAdmin}
+                        type="email"
+                        placeholder="Email"
+                        value={newUser.email}
                         onChange={(e) =>
-                          setNewUser({ ...newUser, isAdmin: e.target.checked })
+                          setNewUser({ ...newUser, email: e.target.value })
                         }
-                        className="rounded"
+                        className="w-full px-4 py-2 border rounded-lg"
                       />
-                      <label>Is Admin</label>
-                    </div>
-                    <div className="flex justify-end space-x-4">
-                      <button
-                        type="button"
-                        onClick={() => setCreateType(null)}
-                        className="px-4 py-2 text-[#AA4D2B] hover:bg-gray-100 rounded-lg"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="px-4 py-2 bg-[#AA4D2B] text-white rounded-lg hover:bg-[#943f21]"
-                      >
-                        Create User
-                      </button>
-                    </div>
-                  </form>
+                      <input
+                        type="password"
+                        placeholder="Password"
+                        value={newUser.password}
+                        onChange={(e) =>
+                          setNewUser({ ...newUser, password: e.target.value })
+                        }
+                        className="w-full px-4 py-2 border rounded-lg"
+                      />
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={newUser.isAdmin}
+                          onChange={(e) =>
+                            setNewUser({
+                              ...newUser,
+                              isAdmin: e.target.checked,
+                            })
+                          }
+                          className="rounded"
+                        />
+                        <label>Is Admin</label>
+                      </div>
+                      <div className="flex justify-end space-x-4">
+                        <button
+                          type="button"
+                          onClick={() => setCreateType(null)}
+                          className="px-4 py-2 text-[#AA4D2B] hover:bg-gray-100 rounded-lg"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-[#AA4D2B] text-white rounded-lg hover:bg-[#943f21]"
+                        >
+                          Create User
+                        </button>
+                      </div>
+                    </form>
+                  </>
                 )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "insight" && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl px-0 py-2">
+                <h2 className="text-2xl font-bold text-center mb-6 text-[#1C1F20]">
+                  Most Popular Cars
+                </h2>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-6 py-3 text-left text-lg font-medium text-gray-500">
+                          Rank
+                        </th>
+                        <th className="px-6 py-3 text-left text-lg font-medium text-gray-500">
+                          Car
+                        </th>
+                        <th className="px-6 py-3 text-left text-lg font-medium text-gray-500">
+                          Type
+                        </th>
+                        <th className="px-6 py-3 text-left text-lg font-medium text-gray-500">
+                          Number of Bookings
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {Object.entries(
+                        bookings.reduce((acc, booking) => {
+                          acc[booking.carId] = (acc[booking.carId] || 0) + 1;
+                          return acc;
+                        }, {} as Record<number, number>)
+                      )
+                        .map(([carId, count]) => ({
+                          carId: parseInt(carId),
+                          count,
+                        }))
+                        .sort((a, b) => b.count - a.count)
+                        .slice(0, 5)
+                        .map((item, index) => {
+                          const car = cars.find((c) => c.id === item.carId);
+                          if (!car) return null;
+
+                          return (
+                            <tr key={car.id}>
+                              <td className="px-6 py-4 text-black">
+                                #{index + 1}
+                              </td>
+                              <td className="px-6 py-4 text-black">
+                                {car.manufacturer} {car.model}
+                              </td>
+                              <td className="px-6 py-4 text-black">
+                                {car.type}
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="px-4 py-1 bg-[#AA4D2B]/10 text-[#AA4D2B] rounded-full">
+                                  {item.count} bookings
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}

@@ -154,7 +154,7 @@ export default function ProfilePage() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-3xl shadow p-4 md:p-8 mb-8">
-            <h1 className="text-4xl md:text-4xl font-bold text-[#1C1F20] mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-black text-center mb-5 underline underline-offset-8">
               Profile
             </h1>
             {error && (
@@ -163,10 +163,10 @@ export default function ProfilePage() {
               </div>
             )}
             <div className="mb-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+              <div className="w-full flex flex-col md:flex-row md:items-center justify-between mb-4">
                 <div className="w-full md:w-auto">
                   <h2 className="text-3xl font-semibold text-[#1C1F20]">
-                    Email
+                    Email:
                   </h2>
                   {isEditing ? (
                     <div className="flex flex-col md:flex-row items-start md:items-center mt-2 gap-2">
@@ -174,12 +174,12 @@ export default function ProfilePage() {
                         type="email"
                         value={newEmail}
                         onChange={(e) => setNewEmail(e.target.value)}
-                        className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg"
+                        className="w-full md:w-[300px] px-3 py-2 border border-gray-300 rounded-lg"
                       />
                       <div className="flex gap-2 w-full md:w-auto">
                         <button
                           onClick={handleUpdateEmail}
-                          className="w-full md:w-auto bg-[#AA4D2B] text-white px-4 py-2 rounded-lg hover:bg-[#943f21]"
+                          className="w-full md:w-auto bg-[#AA4D2B] text-white px-4 py-2 ml-2 rounded-lg hover:bg-[#943f21]"
                         >
                           Save
                         </button>
@@ -188,7 +188,7 @@ export default function ProfilePage() {
                             setIsEditing(false);
                             setNewEmail(user?.email || "");
                           }}
-                          className="w-full md:w-auto text-gray-600 hover:text-gray-800"
+                          className="w-full md:w-auto text-gray-600 hover:text-[#AA4D2B] ml-3"
                         >
                           Cancel
                         </button>
@@ -196,12 +196,12 @@ export default function ProfilePage() {
                     </div>
                   ) : (
                     <div className="flex items-center mt-2">
-                      <span className="text-gray-600 text-lg">
+                      <span className="text-gray-600 text-lg w-full mr-5">
                         {user?.email}
                       </span>
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="ml-4 text-[#AA4D2B] hover:text-[#943f21] text-base"
+                        className="ml-4 bg-[#AA4D2B] hover:bg-[#943f21] text-base text-white px-4 py-2 rounded-lg"
                       >
                         Edit
                       </button>
@@ -212,7 +212,7 @@ export default function ProfilePage() {
             </div>
             <div className="mt-8">
               <h2 className="text-3xl font-bold text-[#1C1F20] mb-4">
-                Current Bookings
+                Current Bookings:
               </h2>
               {bookings.length === 0 ? (
                 <p className="text-gray-600 text-lg">No current bookings</p>

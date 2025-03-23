@@ -83,7 +83,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="py-2 px-6 md:px-16 mt-4 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 max-w-[1400px] mx-auto">
+    <nav className="pt-6 pb-2 px-6 md:px-16 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 max-w-[1400px] mx-auto">
       <Link href="/">
         <div
           className={`text-black text-4xl font-extrabold tracking-wide hover:text-[${COLORS.primary.DEFAULT}] cursor-pointer ${TRANSITIONS.DEFAULT} select-none`}
@@ -163,7 +163,7 @@ const Navbar: React.FC = () => {
               </button>
             </Link>
 
-            <div className="flex items-center justify-center">
+            <div className="flex place-items-center justify-center">
               <h1 className="text-black text-xl font-bold w-auto hidden sm:block">
                 /
               </h1>

@@ -6,4 +6,6 @@ export class CreateUserDto {
 
   @IsStrongPassword()
   password: string;
+
+  isAdmin: boolean;
 }

@@ -35,7 +35,7 @@ export default function CarDetailPage({
   const [userId, setUserId] = useState<number | null>(null);
   const router = useRouter();
   const resolvedParams = use(params);
-  
+
   const carId = resolvedParams.id;
 
   useEffect(() => {
@@ -93,7 +93,9 @@ export default function CarDetailPage({
       setError("Please select both start and end dates");
       return;
     }
-    router.push(`/cars/${carId}/booking?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+    router.push(
+      `/cars/${carId}/booking?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
+    );
   };
 
   if (loading) {
@@ -123,7 +125,7 @@ export default function CarDetailPage({
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow p-4 md:p-8">
-          <h1 className="text-3xl md:text-5xl font-bold text-[#1C1F20] mb-6">
+          <h1 className="text-3xl md:text-5xl font-bold text-[#AA4D2B] mb-4">
             {car.manufacturer} {car.model}
           </h1>
 
@@ -135,32 +137,50 @@ export default function CarDetailPage({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20]">
-                Car Details
+              <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20] underline underline-offset-[10px]">
+                Car Details:
               </h2>
               <div className="space-y-2">
                 <p className="flex justify-between">
-                  <span className="font-medium text-xl text-[#1C1F20]">Type:</span>
+                  <span className="font-medium text-xl text-[#1C1F20]">
+                    Type:
+                  </span>
                   <span className="text-lg text-[#1C1F20]">{car.type}</span>
                 </p>
                 <p className="flex justify-between">
-                  <span className="font-medium text-xl text-[#1C1F20]">Seats:</span>
-                  <span className="text-lg text-[#1C1F20]">{car.numberOfSeats}</span>
+                  <span className="font-medium text-xl text-[#1C1F20]">
+                    Seats:
+                  </span>
+                  <span className="text-lg text-[#1C1F20]">
+                    {car.numberOfSeats}
+                  </span>
                 </p>
                 <p className="flex justify-between">
-                  <span className="font-medium text-xl text-[#1C1F20]">Suitcases:</span>
-                  <span className="text-lg text-[#1C1F20]">{car.numberOfSuitcases}</span>
+                  <span className="font-medium text-xl text-[#1C1F20]">
+                    Suitcases:
+                  </span>
+                  <span className="text-lg text-[#1C1F20]">
+                    {car.numberOfSuitcases}
+                  </span>
                 </p>
                 <p className="flex justify-between">
-                  <span className="font-medium text-xl text-[#1C1F20]">Fuel Type:</span>
+                  <span className="font-medium text-xl text-[#1C1F20]">
+                    Fuel Type:
+                  </span>
                   <span className="text-lg text-[#1C1F20]">{car.fuelType}</span>
                 </p>
                 <p className="flex justify-between">
-                  <span className="font-medium text-xl text-[#1C1F20]">Transmission:</span>
-                  <span className="text-lg text-[#1C1F20]">{car.clutchType}</span>
+                  <span className="font-medium text-xl text-[#1C1F20]">
+                    Transmission:
+                  </span>
+                  <span className="text-lg text-[#1C1F20]">
+                    {car.clutchType}
+                  </span>
                 </p>
                 <p className="flex justify-between">
-                  <span className="font-medium text-2xl text-[#1C1F20]">Price per day:</span>
+                  <span className="font-medium text-2xl text-[#1C1F20]">
+                    Price per day:
+                  </span>
                   <span className="text-[#AA4D2B] font-bold text-2xl">
                     {formatPrice(car.priceForOneDay)}
                   </span>
@@ -169,19 +189,27 @@ export default function CarDetailPage({
             </div>
 
             <div className="space-y-4">
-              <Image src={`/${carId}.png`} width={500} height={300} className="" alt="Car" />
+              <Image
+                src={`/${carId}.png`}
+                width={500}
+                height={300}
+                className=""
+                alt="Car"
+              />
             </div>
 
-            <div className="col-span-1 md:col-span-2 w-full border-t-[1px] border-black">
+            <div className="col-span-1 md:col-span-2 w-full border-t-[2px] border-black">
               <div className="space-y-6 max-w-2xl mx-auto mt-4">
                 <h2 className="text-xl md:text-3xl font-semibold text-[#1C1F20] text-center">
                   Book Now
                 </h2>
                 <div className="space-y-4 w-full">
-                  <div className="w-full"> 
-                      <label className="block text-[#1C1F20] text-xl tetx-center mb-2 ">
+                  <div className="w-full">
+                    <div className="w-[400px] mx-auto">
+                      <label className="block text-[#1C1F20] text-xl text-left mb-1 pl-2">
                         Start Date
                       </label>
+                    </div>
                     <div className="flex justify-center">
                       <DatePicker
                         selected={startDate}
@@ -193,15 +221,17 @@ export default function CarDetailPage({
                     </div>
                   </div>
                   <div className="w-full">
-                    <label className="block text-[#1C1F20] text-xl mb-2 text-center">
-                      End Date
-                    </label>
+                    <div className="w-[400px] mx-auto">
+                      <label className="block text-[#1C1F20] text-xl text-left mb-1 pl-2">
+                        End Date
+                      </label>
+                    </div>
                     <div className="flex justify-center">
                       <DatePicker
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
                         minDate={startDate || new Date()}
-                        className="w-full md:w-[400px] px-6 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg"
+                        className="w-full md:w-[400px] px-6 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg mb-2"
                         placeholderText="Select end date"
                       />
                     </div>

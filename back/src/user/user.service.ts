@@ -14,6 +14,7 @@ export class UsersService {
       data: {
         ...createUserDto,
         password: hashedPw,
+        isAdmin: createUserDto.isAdmin || false,
       },
     });
     delete user.password;

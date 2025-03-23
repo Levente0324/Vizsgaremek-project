@@ -41,7 +41,7 @@ const Faq = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto mt-20 pb-10 px-4">
+    <div className="w-full max-w-5xl mx-auto mt-12 pb-8 px-4">
       <h2 className="text-4xl md:text-5xl font-medium text-center text-[#1C1F20] mb-10 select-none">
         Frequently Asked Questions
       </h2>
