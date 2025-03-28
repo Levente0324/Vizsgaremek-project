@@ -394,7 +394,7 @@ export default function AdminPage() {
                           className="relative z-10"
                           onClose={() => setOpenCarId(null)}
                         >
-                          <DialogBackdrop className="fixed inset-0 bg-black/10 opacity-10" />
+                          <DialogBackdrop className="fixed inset-0 bg-black/30" />
                           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                             <div className="flex min-h-full items-center justify-center p-4">
                               <DialogPanel

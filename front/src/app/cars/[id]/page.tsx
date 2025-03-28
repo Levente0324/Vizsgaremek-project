@@ -22,6 +22,20 @@ interface Car {
   isAvailable: boolean;
 }
 
+interface Booking {
+  id: number;
+  carId: number;
+  userId: number;
+  startDate: string;
+  endDate: string;
+  car: {
+    id: number;
+    manufacturer: string;
+    model: string;
+    priceForOneDay: number;
+  };
+}
+
 export default function CarDetailPage({
   params,
 }: {
@@ -33,6 +47,7 @@ export default function CarDetailPage({
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [error, setError] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const router = useRouter();
   const resolvedParams = use(params);
 
@@ -40,6 +55,12 @@ export default function CarDetailPage({
 
   useEffect(() => {
     const fetchCar = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/sign-in");
+        return;
+      }
+
       try {
         const response = await fetch(`http://localhost:3000/cars/${carId}`);
         if (!response.ok) {
@@ -47,9 +68,20 @@ export default function CarDetailPage({
         }
         const data = await response.json();
         setCar(data);
+
+        const bookingsResponse = await fetch("http://localhost:3000/bookings", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const allBookings = await bookingsResponse.json();
+        const userBookings = allBookings.filter(
+          (booking: Booking) => booking.carId === parseInt(carId)
+        );
+        setBookings(userBookings);
       } catch (error) {
         console.error("Error:", error);
-        setError("Failed to load car data");
+        setError("Failed to load car, booking data");
       } finally {
         setLoading(false);
       }
@@ -93,9 +125,45 @@ export default function CarDetailPage({
       setError("Please select both start and end dates");
       return;
     }
+
+    if (startDate > endDate) {
+      setError("End date must be after start date");
+      return;
+    }
+
     router.push(
-      `/cars/${carId}/booking?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
+      `/cars/${carId}/booking?startDate=${startDate.toString()}&endDate=${endDate.toString()}`
     );
+  };
+
+  const getExcludedIntervals = () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(23, 59, 59, 999);
+
+    const intervals = [{ start: new Date(0), end: yesterday }];
+
+    if (startDate) {
+      bookings.forEach((booking) => {
+        const bookingStart = new Date(booking.startDate);
+
+        if (bookingStart > startDate) {
+          intervals.push({
+            start: bookingStart,
+            end: new Date(8640000000000000),
+          });
+        }
+      });
+    } else {
+      bookings.forEach((booking) => {
+        intervals.push({
+          start: new Date(booking.startDate),
+          end: new Date(booking.endDate),
+        });
+      });
+    }
+
+    return intervals;
   };
 
   if (loading) {
@@ -212,10 +280,17 @@ export default function CarDetailPage({
                     </div>
                     <div className="flex justify-center">
                       <DatePicker
+                        dateFormat="yyyy/MM/dd"
+                        excludeDateIntervals={getExcludedIntervals()}
                         selected={startDate}
-                        onChange={(date) => setStartDate(date)}
+                        onChange={(date) => {
+                          setStartDate(date);
+                          if (endDate && date && date > endDate) {
+                            setEndDate(null); // Reset end date if start date is after it
+                          }
+                        }}
                         minDate={new Date()}
-                        className="w-full md:w-[400px] px-6 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg"
+                        className="w-full md:w-[400px] px-4 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg"
                         placeholderText="Select start date"
                       />
                     </div>
@@ -226,12 +301,14 @@ export default function CarDetailPage({
                         End Date
                       </label>
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center place-items-center">
                       <DatePicker
+                        dateFormat="yyyy/MM/dd"
+                        excludeDateIntervals={getExcludedIntervals()}
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
                         minDate={startDate || new Date()}
-                        className="w-full md:w-[400px] px-6 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg mb-2"
+                        className="w-full md:w-[400px] px-4 py-3 border border-gray-300 rounded-xl hover:cursor-pointer focus:cursor-default text-lg mb-2"
                         placeholderText="Select end date"
                       />
                     </div>
