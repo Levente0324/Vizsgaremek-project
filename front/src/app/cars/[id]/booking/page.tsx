@@ -5,21 +5,6 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Navbar from "@/components/navbar";
 import { formatPrice } from "@/utils/currency";
 
-interface BookingStepsProps {
-  carPrice: number;
-  onComplete: (data: BookingData) => void;
-  onCancel: () => void;
-  startDate: Date;
-  endDate: Date;
-}
-
-interface BookingData {
-  protectionPackage: Protection | null;
-  extras: Extra[];
-  paymentDetails: PaymentDetails;
-  totalPrice: number;
-}
-
 interface Protection {
   name: string;
   price: number;
@@ -116,25 +101,6 @@ const formatExpiryDate = (value: string): string => {
   return numbers;
 };
 
-const isValidName = (name: string): boolean => {
-  return /^[A-Za-z\s]{3,}$/.test(name);
-};
-
-const isValidExpiryDate = (date: string): boolean => {
-  if (!/^\d{2}\/\d{2}$/.test(date)) return false;
-
-  const [month, year] = date.split("/").map((num) => parseInt(num));
-  const currentYear = new Date().getFullYear() % 100;
-
-  return (
-    month >= 1 &&
-    month <= 12 &&
-    year >= 25 &&
-    (year > currentYear ||
-      (year === currentYear && month > new Date().getMonth() + 1))
-  );
-};
-
 export default function BookingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -219,7 +185,7 @@ export default function BookingPage() {
       return false;
     }
 
-    if (!isValidName(paymentDetails.cardHolder)) {
+    if (!/^[A-Za-z\s]{3,}$/.test(paymentDetails.cardHolder)) {
       setError(
         "Card holder name must be at least 3 letters and contain only letters and spaces"
       );
@@ -231,10 +197,26 @@ export default function BookingPage() {
       return false;
     }
 
-    if (!isValidExpiryDate(paymentDetails.expiryDate)) {
-      setError(
-        "Invalid expiry date. Must be MM/YY format and date must be in the future"
-      );
+    const [month, year] = paymentDetails.expiryDate
+      .split("/")
+      .map((num) => parseInt(num));
+    const currentYear = new Date().getFullYear() % 100;
+
+    if (!/^\d{2}\/\d{2}$/.test(paymentDetails.expiryDate)) {
+      setError("Expiry date must be in MM/YY format");
+      return false;
+    }
+
+    if (
+      !(
+        month >= 1 &&
+        month <= 12 &&
+        year >= 25 &&
+        (year > currentYear ||
+          (year === currentYear && month > new Date().getMonth() + 1))
+      )
+    ) {
+      setError("Invalid expiry date");
       return false;
     }
 
@@ -246,10 +228,6 @@ export default function BookingPage() {
     if (!validateCard()) return;
 
     const total = calculateTotal();
-    if (!total || isNaN(total)) {
-      setError("Invalid total price calculation");
-      return;
-    }
 
     try {
       const token = localStorage.getItem("token");
@@ -452,6 +430,7 @@ export default function BookingPage() {
                       }))
                     }
                     placeholder="1234567890123456"
+                    required
                   />
                 </div>
                 <div>
@@ -469,6 +448,7 @@ export default function BookingPage() {
                       }))
                     }
                     placeholder="John Doe"
+                    required
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -491,6 +471,7 @@ export default function BookingPage() {
                       }}
                       placeholder="MM/YY"
                       maxLength={5}
+                      required
                     />
                   </div>
                   <div>
@@ -509,6 +490,7 @@ export default function BookingPage() {
                         }))
                       }
                       placeholder="123"
+                      required
                     />
                   </div>
                 </div>

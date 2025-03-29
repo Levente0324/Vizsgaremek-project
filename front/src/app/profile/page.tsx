@@ -75,7 +75,6 @@ export default function ProfilePage() {
         console.error("Error:", error);
         setError("Failed to load profile data");
         localStorage.removeItem("token");
-        localStorage.removeItem("user");
         router.push("/sign-in");
       } finally {
         setLoading(false);

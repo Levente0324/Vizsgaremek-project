@@ -286,7 +286,7 @@ export default function CarDetailPage({
                         onChange={(date) => {
                           setStartDate(date);
                           if (endDate && date && date > endDate) {
-                            setEndDate(null); // Reset end date if start date is after it
+                            setEndDate(null);
                           }
                         }}
                         minDate={new Date()}

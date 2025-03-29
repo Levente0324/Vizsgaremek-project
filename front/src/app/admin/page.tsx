@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar";
+import { formatPrice } from "@/utils/currency";
 
 interface Car {
   id: number;
@@ -61,7 +62,6 @@ export default function AdminPage() {
     isAdmin: false,
   });
   const [error, setError] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const [saleAmount, setSaleAmount] = useState(0);
   const [openCarId, setOpenCarId] = useState<number | null>(null);
   const router = useRouter();
@@ -347,7 +347,7 @@ export default function AdminPage() {
                     <th className="px-6 py-3 text-left text-lg font-medium text-gray-500">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-lg font-medium text-gray-500">
+                    <th className="px-6 py-3 text-center text-lg font-medium text-gray-500">
                       Actions
                     </th>
                   </tr>
@@ -362,7 +362,7 @@ export default function AdminPage() {
                       <td className="px-4 py-4 text-black">{car.model}</td>
                       <td className="px-6 py-4 text-black">{car.type}</td>
                       <td className="px-6 py-4 text-black">
-                        {car.priceForOneDay}
+                        {formatPrice(car.priceForOneDay)}
                       </td>
                       <td className="px-6 py-4 text-black">
                         <span
@@ -546,7 +546,7 @@ export default function AdminPage() {
                         {new Date(booking.endDate).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 text-black">
-                        {booking.totalPrice}
+                        {formatPrice(booking.totalPrice)}
                       </td>
                       <td className="px-6 py-1">
                         <button
@@ -621,8 +621,7 @@ export default function AdminPage() {
                     />
                     <input
                       type="number"
-                      placeholder="Number of Seats"
-                      value={newCar.numberOfSeats}
+                      placeholder="Number of Seats (Number)"
                       onChange={(e) =>
                         setNewCar({
                           ...newCar,
@@ -633,8 +632,7 @@ export default function AdminPage() {
                     />
                     <input
                       type="number"
-                      placeholder="Number of Suitcases"
-                      value={newCar.numberOfSuitcases}
+                      placeholder="Number of Suitcases (Number)"
                       onChange={(e) =>
                         setNewCar({
                           ...newCar,
@@ -664,7 +662,6 @@ export default function AdminPage() {
                     <input
                       type="number"
                       placeholder="Price for One Day"
-                      value={newCar.priceForOneDay}
                       onChange={(e) =>
                         setNewCar({
                           ...newCar,
