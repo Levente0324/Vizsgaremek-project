@@ -34,6 +34,16 @@ export class BookingController {
     return this.bookingService.findAll();
   }
 
+  @Get('extras')
+  findAllExtras() {
+    return this.bookingService.findAllExtras();
+  }
+
+  @Get('protections')
+  findAllProtections() {
+    return this.bookingService.findAllProtections();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Foglalás lekérése' })
   @ApiResponse({ status: 200, description: 'Foglalás adatai.' })

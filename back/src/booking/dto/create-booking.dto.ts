@@ -6,6 +6,7 @@ import {
   IsArray,
   IsOptional,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateBookingDto {
   @IsNumber()
@@ -30,6 +31,7 @@ export class CreateBookingDto {
 
   @IsArray()
   @IsOptional()
+  @Transform(({ value }) => value.map(String))
   extras?: string[];
 
   @IsNumber()

@@ -1,10 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import * as argon2 from 'argon2';
+import { process } from 'process';
 const prisma = new PrismaClient();
 
 async function cleanDatabase() {
   await prisma.extraOnBookings.deleteMany({});
+  await prisma.protectionPlan.deleteMany({});
   await prisma.protection.deleteMany({});
   await prisma.booking.deleteMany({});
   await prisma.extra.deleteMany({});
@@ -450,7 +452,7 @@ async function seedExtras() {
 }
 
 async function seedProtections() {
-  const protections = [
+  const protectionPlans = [
     {
       name: 'Basic',
       price: 5000,
@@ -466,11 +468,20 @@ async function seedProtections() {
       price: 12000,
       description: 'Complete coverage with zero deductible',
     },
+    {
+      name: 'None',
+      price: 0,
+      description: 'No additional protection',
+    },
   ];
 
-  global.protectionOptions = protections;
+  for (const plan of protectionPlans) {
+    await prisma.protectionPlan.create({
+      data: plan,
+    });
+  }
 
-  console.log('Protections prepared (will be created with bookings)');
+  console.log('Protection plans seeded');
 }
 
 async function main() {
@@ -503,6 +514,7 @@ async function main() {
 
     const cars = await prisma.car.findMany({ take: 5 });
     const extras = await prisma.extra.findMany();
+    const protectionPlans = await prisma.protectionPlan.findMany();
 
     for (let i = 0; i < 3; i++) {
       const car = cars[i % cars.length];
@@ -516,9 +528,9 @@ async function main() {
         (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
       );
 
-      const selectedProtection =
-        global.protectionOptions[
-          faker.number.int({ min: 0, max: global.protectionOptions.length - 1 })
+      const selectedProtectionPlan =
+        protectionPlans[
+          faker.number.int({ min: 0, max: protectionPlans.length - 1 })
         ];
 
       const booking = await prisma.booking.create({
@@ -527,12 +539,10 @@ async function main() {
           endDate,
           carId: car.id,
           userId: user.id,
-          totalPrice: car.priceForOneDay * days + selectedProtection.price,
+          totalPrice: car.priceForOneDay * days + selectedProtectionPlan.price,
           protection: {
             create: {
-              name: selectedProtection.name,
-              price: selectedProtection.price,
-              description: selectedProtection.description,
+              protectionPlanId: selectedProtectionPlan.id,
             },
           },
         },

@@ -6,13 +6,14 @@ import Navbar from "@/components/navbar";
 import { formatPrice } from "@/utils/currency";
 
 interface Protection {
+  id: number;
   name: string;
   price: number;
   description: string;
 }
 
 interface Extra {
-  id: string;
+  id: number;
   name: string;
   price: number;
   description: string;
@@ -37,56 +38,6 @@ interface Car {
   priceForOneDay: number;
   isAvailable: boolean;
 }
-
-const PROTECTION_PACKAGES: Protection[] = [
-  {
-    name: "Basic",
-    price: 5000,
-    description: "Basic coverage for minor damages",
-  },
-  {
-    name: "Premium",
-    price: 8000,
-    description: "Extended coverage including tire and glass damage",
-  },
-  {
-    name: "Full",
-    price: 12000,
-    description: "Complete coverage with zero deductible",
-  },
-  {
-    name: "None",
-    price: 0,
-    description: "No additional protection",
-  },
-];
-
-const EXTRA_SERVICES: Extra[] = [
-  {
-    id: "1",
-    name: "GPS Navigation",
-    price: 2000,
-    description: "Built-in GPS navigation system",
-  },
-  {
-    id: "2",
-    name: "Child Seat",
-    price: 3000,
-    description: "Safe and comfortable child seat",
-  },
-  {
-    id: "3",
-    name: "Additional Driver",
-    price: 5000,
-    description: "Register an additional driver",
-  },
-  {
-    id: "4",
-    name: "Airport Pickup",
-    price: 8000,
-    description: "Pickup service from airport",
-  },
-];
 
 const formatCardNumber = (value: string): string => {
   const numbers = value.replace(/\D/g, "");
@@ -117,7 +68,8 @@ export default function BookingPage() {
     cvv: "",
   });
   const [error, setError] = useState("");
-
+  const [protectionPlans, setProtectionPlans] = useState<Protection[]>([]);
+  const [extraServices, setExtraServices] = useState<Extra[]>([]);
   const [userId, setUserId] = useState<number | null>(null);
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
@@ -132,23 +84,41 @@ export default function BookingPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const carResponse = await fetch(`http://localhost:3000/cars/${carId}`);
-        const carData = await carResponse.json();
-        setCar(carData);
+        const [carResponse, protectionResponse, extrasResponse] =
+          await Promise.all([
+            fetch(`http://localhost:3000/cars/${carId}`),
+            fetch("http://localhost:3000/bookings/protections"),
+            fetch("http://localhost:3000/bookings/extras"),
+          ]);
 
         const token = localStorage.getItem("token");
-        if (token) {
-          const userResponse = await fetch(
-            "http://localhost:3000/auth/profile",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const userData = await userResponse.json();
-          setUserId(userData.id);
+        const userResponse = await fetch("http://localhost:3000/auth/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (
+          !carResponse.ok ||
+          !protectionResponse.ok ||
+          !extrasResponse.ok ||
+          !userResponse.ok
+        ) {
+          throw new Error("Failed to fetch required data");
         }
+
+        const [carData, protectionData, extrasData, userData] =
+          await Promise.all([
+            carResponse.json(),
+            protectionResponse.json(),
+            extrasResponse.json(),
+            userResponse.json(),
+          ]);
+
+        setCar(carData);
+        setProtectionPlans(protectionData);
+        setExtraServices(extrasData);
+        setUserId(userData.id);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to load required data");
@@ -310,7 +280,7 @@ export default function BookingPage() {
                 Choose Protection Package
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {PROTECTION_PACKAGES.map((pkg) => (
+                {protectionPlans.map((pkg) => (
                   <div
                     key={pkg.name}
                     className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
@@ -356,7 +326,7 @@ export default function BookingPage() {
                 Select Extra Services
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {EXTRA_SERVICES.map((service) => (
+                {extraServices.map((service) => (
                   <div
                     key={service.id}
                     className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${

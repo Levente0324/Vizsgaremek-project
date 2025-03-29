@@ -40,12 +40,20 @@ CREATE TABLE `bookings` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `protections` (
+CREATE TABLE `protection_plans` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `bookingId` INTEGER NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `price` DOUBLE NOT NULL,
     `description` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `protections` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `bookingId` INTEGER NOT NULL,
+    `protectionPlanId` INTEGER NOT NULL,
 
     UNIQUE INDEX `protections_bookingId_key`(`bookingId`),
     PRIMARY KEY (`id`)
@@ -89,6 +97,9 @@ ALTER TABLE `bookings` ADD CONSTRAINT `bookings_userId_fkey` FOREIGN KEY (`userI
 
 -- AddForeignKey
 ALTER TABLE `protections` ADD CONSTRAINT `protections_bookingId_fkey` FOREIGN KEY (`bookingId`) REFERENCES `bookings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `protections` ADD CONSTRAINT `protections_protectionPlanId_fkey` FOREIGN KEY (`protectionPlanId`) REFERENCES `protection_plans`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `extra_on_bookings` ADD CONSTRAINT `extra_on_bookings_bookingId_fkey` FOREIGN KEY (`bookingId`) REFERENCES `bookings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
