@@ -28,7 +28,7 @@ export class CarsController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard('bearer'))
-  @ApiOperation({ summary: 'Jármű létrehozása' })
+  @ApiOperation({ summary: 'Jármű létrehozása (admin)' })
   @ApiResponse({
     status: 201,
     description: 'Jármű sikeresen létrehozva',
@@ -65,7 +65,7 @@ export class CarsController {
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('bearer'))
-  @ApiOperation({ summary: 'Jármű módosítása' })
+  @ApiOperation({ summary: 'Jármű módosítása (admin)' })
   @ApiResponse({
     status: 200,
     description: 'Jármű sikeresen módosítva',
@@ -85,7 +85,7 @@ export class CarsController {
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('bearer'))
-  @ApiOperation({ summary: 'Jármű törlése' })
+  @ApiOperation({ summary: 'Jármű törlése (admin)' })
   @ApiResponse({ status: 200, description: 'Jármű sikeresen törölve' })
   @ApiResponse({ status: 400, description: 'Hibás bemenet' })
   @ApiResponse({ status: 401, description: 'Jogosultság megtagadva' })

@@ -30,6 +30,10 @@ export class AuthService {
 
   // Registration
   async register(userData: { email: string; password: string }) {
+    if (!userData.email || !userData.password) {
+      throw new Error('Email and password are required');
+    }
+
     const hashedPassword = await argon2.hash(userData.password);
 
     try {
@@ -69,6 +73,10 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
+      if (await this.db.token.findFirst({ where: { userId: user.id } })) {
+        throw new UnauthorizedException('Already logged in');
+      }
+
       const token = crypto.randomBytes(64).toString('hex');
 
       await this.db.token.create({
@@ -90,6 +98,15 @@ export class AuthService {
   async logout(token: string) {
     try {
       const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenValue },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
 
       await this.db.token.delete({
         where: { token: tokenValue },

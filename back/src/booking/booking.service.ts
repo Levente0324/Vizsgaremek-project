@@ -11,7 +11,7 @@ export class BookingService {
     try {
       const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
 
-      const tokenRecord = this.db.token.findUnique({
+      const tokenRecord = await this.db.token.findUnique({
         where: { token: tokenObj },
         include: { user: true },
       });
@@ -96,6 +96,10 @@ export class BookingService {
 
       if (!tokenRecord) {
         throw new UnauthorizedException('Invalid token');
+      }
+
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
       }
 
       return this.db.booking.findUnique({

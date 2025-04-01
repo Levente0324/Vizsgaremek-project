@@ -77,7 +77,7 @@ export class BookingController {
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('bearer'))
-  @ApiOperation({ summary: 'Foglalás lekérése' })
+  @ApiOperation({ summary: 'Foglalás lekérése (admin)' })
   @ApiResponse({
     status: 200,
     description: 'Foglalás adatai',

@@ -29,7 +29,7 @@ export class UsersController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard('bearer'))
-  @ApiOperation({ summary: 'Felhasználó létrehozása' })
+  @ApiOperation({ summary: 'Felhasználó létrehozása (admin)' })
   @ApiResponse({
     status: 201,
     description: 'Felhasználó sikeresen létrehozva',
@@ -48,7 +48,7 @@ export class UsersController {
   @Get()
   @ApiBearerAuth()
   @UseGuards(AuthGuard('bearer'))
-  @ApiOperation({ summary: 'Felhasználók listázása' })
+  @ApiOperation({ summary: 'Felhasználók listázása (admin)' })
   @ApiResponse({ status: 200, description: 'Felhasználók listája' })
   @ApiResponse({ status: 400, description: 'Hibás bemenet' })
   @ApiResponse({ status: 401, description: 'Nincs jogosultság' })
@@ -58,16 +58,19 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Felhasználó lekérése' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('bearer'))
+  @ApiOperation({ summary: 'Felhasználó lekérése (admin)' })
   @ApiResponse({
     status: 200,
     description: 'Felhasználó adatai',
     type: CreateUserDto,
   })
   @ApiResponse({ status: 400, description: 'Hibás bemenet' })
+  @ApiResponse({ status: 401, description: 'Nincs jogosultság' })
   @ApiResponse({ status: 404, description: 'Nem található' })
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOne(@Param('id') id: string, @Headers('Authorization') token: string) {
+    return this.usersService.findOne(+id, token);
   }
 
   @Patch(':id')
@@ -93,7 +96,7 @@ export class UsersController {
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('bearer'))
-  @ApiOperation({ summary: 'Felhasználó törlése' })
+  @ApiOperation({ summary: 'Felhasználó törlése (admin)' })
   @ApiResponse({ status: 200, description: 'Felhasználó sikeresen törölve' })
   @ApiResponse({ status: 400, description: 'Hibás bemenet' })
   @ApiResponse({ status: 401, description: 'Nincs jogosultság' })

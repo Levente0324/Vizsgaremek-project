@@ -30,7 +30,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Sikeres regisztráció',
-    type: LoginDto,
+    type: CreateUserDto,
   })
   @ApiResponse({ status: 400, description: 'Hibás bemenet' })
   @ApiResponse({ status: 404, description: 'Nem található' })

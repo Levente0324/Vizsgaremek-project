@@ -12,13 +12,17 @@ export class UsersService {
     try {
       const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
 
-      const tokenRecord = this.db.token.findUnique({
+      const tokenRecord = await this.db.token.findUnique({
         where: { token: tokenObj },
         include: { user: true },
       });
 
       if (!tokenRecord) {
         throw new UnauthorizedException('Invalid token');
+      }
+
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
       }
 
       const hashedPw = await argon2.hash(createUserDto.password);
@@ -36,11 +40,11 @@ export class UsersService {
     }
   }
 
-  findAll(token: string) {
+  async findAll(token: string) {
     try {
       const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
 
-      const tokenRecord = this.db.token.findUnique({
+      const tokenRecord = await this.db.token.findUnique({
         where: { token: tokenObj },
         include: { user: true },
       });
@@ -49,16 +53,39 @@ export class UsersService {
         throw new UnauthorizedException('Invalid token');
       }
 
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
+      }
+
       return this.db.user.findMany();
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
   }
 
-  findOne(id: number) {
-    return this.db.user.findUnique({
-      where: { id },
-    });
+  async findOne(id: number, token: string) {
+    try {
+      const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenObj },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
+      }
+
+      return this.db.user.findUnique({
+        where: { id },
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto, token: string) {
@@ -83,11 +110,11 @@ export class UsersService {
     }
   }
 
-  remove(id: number, token: string) {
+  async remove(id: number, token: string) {
     try {
       const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
 
-      const tokenRecord = this.db.token.findUnique({
+      const tokenRecord = await this.db.token.findUnique({
         where: { token: tokenObj },
         include: { user: true },
       });
@@ -96,22 +123,15 @@ export class UsersService {
         throw new UnauthorizedException('Invalid token');
       }
 
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
+      }
+
       return this.db.user.delete({
         where: { id },
       });
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
-  }
-
-  async getUserByToken(token: string) {
-    const tokenObj = await this.db.token.findUnique({
-      where: { token },
-      include: { user: true },
-    });
-    if (!tokenObj) return null;
-    const user = tokenObj.user;
-    delete user.password;
-    return user;
   }
 }

@@ -20,6 +20,10 @@ export class CarsService {
         throw new UnauthorizedException('Invalid token');
       }
 
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
+      }
+
       return this.db.car.create({
         data: createCarDto,
       });
@@ -51,6 +55,10 @@ export class CarsService {
         throw new UnauthorizedException('Invalid token');
       }
 
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
+      }
+
       return this.db.car.update({
         where: { id },
         data: updateCarDto,
@@ -71,6 +79,10 @@ export class CarsService {
 
       if (!tokenRecord) {
         throw new UnauthorizedException('Invalid token');
+      }
+
+      if (tokenRecord.user.isAdmin === false) {
+        throw new UnauthorizedException('User is not an admin');
       }
 
       return this.db.car.delete({
