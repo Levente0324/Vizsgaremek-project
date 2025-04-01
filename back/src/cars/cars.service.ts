@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
@@ -7,10 +7,25 @@ import { UpdateCarDto } from './dto/update-car.dto';
 export class CarsService {
   constructor(private readonly db: PrismaService) {}
 
-  create(createCarDto: CreateCarDto) {
-    return this.db.car.create({
-      data: createCarDto,
-    });
+  async create(createCarDto: CreateCarDto, token: string) {
+    try {
+      const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenValue },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return this.db.car.create({
+        data: createCarDto,
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   findAll() {
@@ -23,16 +38,46 @@ export class CarsService {
     });
   }
 
-  update(id: number, updateCarDto: UpdateCarDto) {
-    return this.db.car.update({
-      where: { id },
-      data: updateCarDto,
-    });
+  async update(id: number, updateCarDto: UpdateCarDto, token: string) {
+    try {
+      const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenValue },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return this.db.car.update({
+        where: { id },
+        data: updateCarDto,
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
-  remove(id: number) {
-    return this.db.car.delete({
-      where: { id },
-    });
+  async remove(id: number, token: string) {
+    try {
+      const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenValue },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return this.db.car.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

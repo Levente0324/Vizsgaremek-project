@@ -1,34 +1,86 @@
-import { IsString, IsInt, IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCarDto {
+  @ApiProperty({
+    example: 'Toyota',
+    description: 'Gyártó',
+    required: true,
+  })
   @IsString()
-  manufacturer: string;  // Gyártó
+  manufacturer: string;
 
+  @ApiProperty({
+    example: 'Corolla',
+    description: 'Modell',
+    required: true,
+  })
   @IsString()
-  model: string;  // Modell
+  model: string;
 
+  @ApiProperty({
+    example: 'Sedan',
+    description: 'Típus',
+    required: true,
+  })
   @IsString()
-  type: string;  // Típus (pl. Sedan, SUV, stb.)
+  type: string;
 
+  @ApiProperty({
+    example: '4',
+    description: 'Ülések száma',
+    required: true,
+  })
   @IsInt()
-  numberOfSeats: number;  // Ülések száma
+  numberOfSeats: number;
 
+  @ApiProperty({
+    example: '5',
+    description: 'Bőröndök száma',
+    required: true,
+  })
   @IsInt()
-  numberOfSuitcases: number;  // Bőröndök száma
+  numberOfSuitcases: number;
 
+  @ApiProperty({
+    example: 'Benzin',
+    description: 'Üzemanyag típus',
+    required: true,
+  })
   @IsString()
-  fuelType: string;  // Üzemanyag típus (pl. Benzin, Diesel)
+  fuelType: string;
 
+  @ApiProperty({
+    example: 'Manual',
+    description: 'Kuplung típus',
+    required: true,
+  })
   @IsString()
-  clutchType: string;  // Kuplung típus (pl. Manuális, Automatikus)
+  clutchType: string;
 
+  @ApiProperty({
+    example: '8000',
+    description: 'Napi ár',
+    required: true,
+  })
   @IsNumber()
-  priceForOneDay: number;  // Napi ár
+  priceForOneDay: number;
 
+  @ApiProperty({
+    example: true,
+    description: 'Elérhetőség',
+    required: true,
+  })
   @IsBoolean()
-  isAvailable: boolean;  // Elérhetőség
+  isAvailable: boolean;
 
   @IsOptional()
   @IsInt()
-  bookId?: number;  // Foglalás ID (ha van)
+  bookId?: number;
 }

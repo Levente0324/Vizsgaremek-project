@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   Request,
+  Headers,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
@@ -20,17 +21,28 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
-@ApiTags('users')
+@ApiTags('Users endpoint')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('bearer'))
   @ApiOperation({ summary: 'Felhasználó létrehozása' })
-  @ApiResponse({ status: 201, description: 'Felhasználó sikeresen létrehozva' })
+  @ApiResponse({
+    status: 201,
+    description: 'Felhasználó sikeresen létrehozva',
+    type: CreateUserDto,
+  })
   @ApiResponse({ status: 400, description: 'Hibás bemenet' })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @ApiResponse({ status: 401, description: 'Nincs jogosultság' })
+  @ApiResponse({ status: 404, description: 'Nem található' })
+  create(
+    @Headers('Authorization') token: string,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    return this.usersService.create(token, createUserDto);
   }
 
   @Get()
@@ -38,28 +50,55 @@ export class UsersController {
   @UseGuards(AuthGuard('bearer'))
   @ApiOperation({ summary: 'Felhasználók listázása' })
   @ApiResponse({ status: 200, description: 'Felhasználók listája' })
-  findAll(@Request() req) {
-    return this.usersService.findAll();
+  @ApiResponse({ status: 400, description: 'Hibás bemenet' })
+  @ApiResponse({ status: 401, description: 'Nincs jogosultság' })
+  @ApiResponse({ status: 404, description: 'Nem található' })
+  findAll(@Headers('Authorization') token: string) {
+    return this.usersService.findAll(token);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Felhasználó lekérése' })
-  @ApiResponse({ status: 200, description: 'Felhasználó adatai' })
+  @ApiResponse({
+    status: 200,
+    description: 'Felhasználó adatai',
+    type: CreateUserDto,
+  })
+  @ApiResponse({ status: 400, description: 'Hibás bemenet' })
+  @ApiResponse({ status: 404, description: 'Nem található' })
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('bearer'))
   @ApiOperation({ summary: 'Felhasználó módosítása' })
-  @ApiResponse({ status: 200, description: 'Felhasználó sikeresen módosítva' })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @ApiResponse({
+    status: 200,
+    description: 'Felhasználó sikeresen módosítva',
+    type: UpdateUserDto,
+  })
+  @ApiResponse({ status: 400, description: 'Hibás bemenet' })
+  @ApiResponse({ status: 401, description: 'Nincs jogosultság' })
+  @ApiResponse({ status: 404, description: 'Nem található' })
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Headers('Authorization') token: string,
+  ) {
+    return this.usersService.update(+id, updateUserDto, token);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('bearer'))
   @ApiOperation({ summary: 'Felhasználó törlése' })
   @ApiResponse({ status: 200, description: 'Felhasználó sikeresen törölve' })
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @ApiResponse({ status: 400, description: 'Hibás bemenet' })
+  @ApiResponse({ status: 401, description: 'Nincs jogosultság' })
+  @ApiResponse({ status: 404, description: 'Nem található' })
+  remove(@Param('id') id: string, @Headers('Authorization') token: string) {
+    return this.usersService.remove(+id, token);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -7,8 +7,19 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 export class BookingService {
   constructor(private readonly db: PrismaService) {}
 
-  async create(createBookingDto: CreateBookingDto) {
+  async create(createBookingDto: CreateBookingDto, token: string) {
     try {
+      const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = this.db.token.findUnique({
+        where: { token: tokenObj },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
       const protectionPlan = await this.db.protectionPlan.findFirst({
         where: {
           name: createBookingDto.protectionType,
@@ -49,43 +60,103 @@ export class BookingService {
     }
   }
 
-  async findAll() {
-    return this.db.booking.findMany({
-      include: {
-        car: true,
-        protection: true,
-        extras: true,
-      },
-    });
+  async findAll(token: string) {
+    try {
+      const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenObj },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return this.db.booking.findMany({
+        include: {
+          car: true,
+          protection: true,
+          extras: true,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return this.db.booking.findUnique({
-      where: { id },
-    });
-  }
+  async findOne(id: number, token: string) {
+    try {
+      const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
 
-  update(id: number, updateBookingDto: UpdateBookingDto) {
-    return this.db.booking.update({
-      where: { id },
-      data: updateBookingDto,
-    });
-  }
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenObj },
+        include: { user: true },
+      });
 
-  async remove(id: number) {
-    await this.db.$transaction([
-      this.db.extraOnBookings.deleteMany({
-        where: { bookingId: id },
-      }),
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
 
-      this.db.protection.deleteMany({
-        where: { bookingId: id },
-      }),
-
-      this.db.booking.delete({
+      return this.db.booking.findUnique({
         where: { id },
-      }),
-    ]);
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async update(id: number, updateBookingDto: UpdateBookingDto, token: string) {
+    try {
+      const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenObj },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return this.db.booking.update({
+        where: { id },
+        data: updateBookingDto,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async remove(id: number, token: string) {
+    try {
+      const tokenObj = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+      const tokenRecord = await this.db.token.findUnique({
+        where: { token: tokenObj },
+        include: { user: true },
+      });
+
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      await this.db.$transaction([
+        this.db.extraOnBookings.deleteMany({
+          where: { bookingId: id },
+        }),
+
+        this.db.protection.deleteMany({
+          where: { bookingId: id },
+        }),
+
+        this.db.booking.delete({
+          where: { id },
+        }),
+      ]);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findAllExtras() {

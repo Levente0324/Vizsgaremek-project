@@ -1,43 +1,86 @@
-import { IsString, IsInt, IsBoolean, IsOptional, IsNumber } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  IsBoolean,
+  IsOptional,
+  IsNumber,
+} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateCarDto {
+  @ApiProperty({
+    example: 'Toyota',
+    description: 'Gyártó',
+  })
   @IsString()
   @IsOptional()
-  manufacturer?: string;  // Gyártó
+  manufacturer?: string;
 
+  @ApiProperty({
+    example: 'Corolla',
+    description: 'Modell',
+  })
   @IsString()
   @IsOptional()
-  model?: string;  // Modell
+  model?: string;
 
+  @ApiProperty({
+    example: 'Sedan',
+    description: 'Típus',
+  })
   @IsString()
   @IsOptional()
-  type?: string;  // Típus
+  type?: string;
 
+  @ApiProperty({
+    example: '4',
+    description: 'Ülések száma',
+  })
   @IsInt()
   @IsOptional()
-  numberOfSeats?: number;  // Ülések száma
+  numberOfSeats?: number;
 
+  @ApiProperty({
+    example: '5',
+    description: 'Bőröndök száma',
+  })
   @IsInt()
   @IsOptional()
-  numberOfSuitcases?: number;  // Bőröndök száma
+  numberOfSuitcases?: number;
 
+  @ApiProperty({
+    example: 'Benzin',
+    description: 'Üzemanyag típus',
+  })
   @IsString()
   @IsOptional()
-  fuelType?: string;  // Üzemanyag típus
+  fuelType?: string;
 
+  @ApiProperty({
+    example: 'Manual',
+    description: 'Kuplung típus',
+  })
   @IsString()
   @IsOptional()
-  clutchType?: string;  // Kuplung típus
+  clutchType?: string;
 
+  @ApiProperty({
+    example: '7000',
+    description: 'Napi ár',
+  })
   @IsNumber()
   @IsOptional()
-  priceForOneDay?: number;  // Napi ár
+  priceForOneDay?: number;
 
+  @ApiProperty({
+    example: true,
+    description: 'Elérhető-e a jármű',
+  })
   @IsBoolean()
   @IsOptional()
-  isAvailable?: boolean;  // Elérhetőség
+  isAvailable?: boolean;
 
   @IsOptional()
   @IsInt()
-  bookId?: number;  // Foglalás ID (ha van)
+  bookId?: number;
 }
