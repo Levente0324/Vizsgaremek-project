@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
@@ -28,7 +32,7 @@ export class CarsService {
         data: createCarDto,
       });
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -64,7 +68,7 @@ export class CarsService {
         data: updateCarDto,
       });
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -89,7 +93,7 @@ export class CarsService {
         where: { id },
       });
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 }

@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import * as argon2 from 'argon2';
 import * as crypto from 'crypto';
@@ -24,7 +28,7 @@ export class AuthService {
       delete user.password;
       return user;
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -90,7 +94,7 @@ export class AuthService {
       delete user.password;
       return { token, user };
     } catch (error) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -112,7 +116,7 @@ export class AuthService {
         where: { token: tokenValue },
       });
     } catch (error) {
-      console.error('Error deleting token:', error);
+      throw new NotFoundException('Server error');
     }
   }
 }

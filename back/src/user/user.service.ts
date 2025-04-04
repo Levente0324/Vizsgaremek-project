@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -36,7 +40,7 @@ export class UsersService {
       delete user.password;
       return user;
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -59,7 +63,7 @@ export class UsersService {
 
       return this.db.user.findMany();
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -84,7 +88,7 @@ export class UsersService {
         where: { id },
       });
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -106,7 +110,7 @@ export class UsersService {
         data: updateUserDto,
       });
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 
@@ -131,7 +135,7 @@ export class UsersService {
         where: { id },
       });
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new NotFoundException('Server error');
     }
   }
 }
