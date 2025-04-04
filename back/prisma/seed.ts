@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import * as argon2 from 'argon2';
-import { process } from 'process';
 const prisma = new PrismaClient();
 
 async function cleanDatabase() {
@@ -587,5 +586,5 @@ main()
   .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
-    process.exit(1);
+    throw e;
   });
