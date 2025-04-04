@@ -35,12 +35,11 @@ Kövesd az alábbi lépéseket ahhoz, hogy el tudd indítani a projektet:
   ```sh
   npx prisma generate
   ```
-- Generáld le a Prisma klienst
+- Seed-eld az adatbázist
   ```sh
   npx prisma migrate dev --name init
   ```
-- Seed-eld az adatbázist
-  ```sh
+- ```sh
   npx prisma db seed
   ```
   Ha bármilyen hibát írna ki, töröld le a `/prisma/migrations` mappát és próbáld újra.
@@ -54,7 +53,7 @@ Kövesd az alábbi lépéseket ahhoz, hogy el tudd indítani a projektet:
 
 ### _Frontend_
 
-Nyiss meg egy új _terminál_-t
+Nyiss meg egy új _terminál_-t (a _Backend_-et hagyd futni a háttérbe)
 
 - Lépj be a frontend mappába
   ```sh
