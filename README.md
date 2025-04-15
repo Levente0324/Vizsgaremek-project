@@ -119,8 +119,11 @@ Kövesd az alábbi lépéseket a mobil app futtatásához:
 # 🛠️ Admin felület elérése
 
 A seed-elés után az adatbázisban autómatikusan létre lesz hozva egy admin fiók, ahova az alábbi email és jelszóval tudsz belépni: <br>
-**Email:** _admin@example.com_ <br>
-**Jelszo:** _adminpass_ <br>
+
+### **Email:** _admin@example.com_ <br>
+
+### **Jelszo:** _adminpass_ <br>
+
 Ezek után fent a navbar-ban a fiók ikon mellet meg kell jelennie az **_"Admin Page"_** button-nek, amivel el tudsz jutni az admin felülethez.
 
 ---
