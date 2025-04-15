@@ -34,7 +34,7 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 
 # 🔎 Hogyan indítsd el
 
-Először is klónozd le a repót a gépedre: `git clone <url>`
+Először is klónozd le a repót a gépedre: <strong>`git clone <url>`</strong>
 
 ## **_Backend_**
 
