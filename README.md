@@ -6,7 +6,7 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 
 # 💻 Használt technológiák
 
-### **Web**
+### **Web:**
 
 - ![Next JS](https://img.shields.io/badge/NextJS-4c4c4d?style=for-the-badge&logo=next.js&logoColor=white)
 - ![Nest JS](https://img.shields.io/badge/NestJS-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
@@ -14,7 +14,7 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 - ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 - ![TailwindCSS](https://img.shields.io/badge/tailwindcss-690000.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-### **Mobil**
+### **Mobil:**
 
 - ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 - ![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
@@ -30,9 +30,7 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 
 # 🔎 Hogyan indítsd el
 
-## Web
-
-## _Backend_
+## **_Backend_**
 
 - Lépj be a backend mappába
   ```sh
@@ -67,7 +65,7 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
   npm run start:debug
   ```
 
-## _Frontend_
+## **_Frontend_**
 
 Nyiss meg egy új _terminál_-t (A _backend_-et hagyd futni a háttérbe)
 
@@ -88,7 +86,7 @@ Nyiss meg egy új _terminál_-t (A _backend_-et hagyd futni a háttérbe)
 
 Ha fut a _Backend_ és a _Frontend_ is, akkor menj fel a <strong>_[https://localhost:8080](https://localhost:8080)_</strong> oldalra, és látnod kellene a webalkalmazást.
 
-## _Mobil_
+## **_Mobil_**
 
 Kövesd az alábbi lépéseket a mobil app futtatásához:
 
@@ -108,6 +106,8 @@ Kövesd az alábbi lépéseket a mobil app futtatásához:
    ```sh
    flutter run
    ```
+
+---
 
 ### _Támogatott platformok_
 
