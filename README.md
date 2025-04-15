@@ -1,6 +1,6 @@
 <div align="center">
 
-# **🌐 Vizsgaremek Projekt 🌐**
+# 🌐 **Vizsgaremek Projekt** 🌐
 
 </div>
 
