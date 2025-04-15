@@ -6,7 +6,7 @@
 
 # ❗Fontos tudnivalók
 
-Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk. Az alkalmazás lehetővé teszi a felhasználók számára, hogy autók között böngésszenek, foglaljanak és kezeljék bérléseiket egy modern, felhasználóbarát felületen. A projekt célja egy teljeskörű bérlési rendszer létrehozása, amely magában foglalja a backend és frontend technológiák használatát.
+Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk. Az alkalmazás lehetővé teszi a felhasználók számára, hogy autók között böngésszenek, foglaljanak és kezeljék bérléseiket egy modern, felhasználóbarát felületen. A projekt célja egy teljeskörű bérlési rendszer létrehozása, amely magában foglalja a mobil, backend és frontend technológiák használatát.
 
 # 💻 Használt technológiák
 
@@ -33,6 +33,8 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 - Android Studio vagy VS Code Flutter bővítményekkel
 
 # 🔎 Hogyan indítsd el
+
+Először is klónozd le a repót a gépedre: `git clone <url>`
 
 ## **_Backend_**
 
@@ -110,6 +112,8 @@ Kövesd az alábbi lépéseket a mobil app futtatásához:
    ```sh
    flutter run
    ```
+
+<br>
 
 ---
 
