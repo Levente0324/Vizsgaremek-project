@@ -34,7 +34,7 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 
 # 🔎 Hogyan indítsd el
 
-Először is klónozd le a repót a gépedre: <strong>`git clone <url>`</strong>
+Először is klónozd le a repót a gépedre aztán nyisd meg: <strong>`git clone <url>`</strong>
 
 ## **_Backend_**
 
@@ -48,7 +48,7 @@ Először is klónozd le a repót a gépedre: <strong>`git clone <url>`</strong>
   npm install
   ```
 
-  Hozz létre egy `.env` fájlt és indítsd el az adatbázist. Csinálj egy <strong>_rentcar_</strong> nevű adatbázist és hagyd üresen. <br>
+  Hozz létre egy `.env` fájlt a _back_ mappában és indítsd el a MySQL adatbázisod (XAMPP). Csinálj egy <strong>_rentcar_</strong> nevű adatbázist és hagyd üresen. <br>
   Írd bele a `.env` fájlba a kapcsolat URL-t, például: <strong>_DATABASE_URL="mysql://root@localhost:3306/rentcar"_</strong>
 
 - Generáld le a Prisma klienst
@@ -90,7 +90,7 @@ Nyiss meg egy új _terminál_-t (A _backend_-et hagyd futni a háttérbe)
 
 <br>
 
-Ha fut a _Backend_ és a _Frontend_ is, akkor menj fel a <strong>_[https://localhost:8080](https://localhost:8080)_</strong> oldalra, és látnod kellene a webalkalmazást.
+Ha fut a _Backend_ és a _Frontend_ is, akkor menj fel a <strong>_[http://localhost:8080](http://localhost:8080)_</strong> oldalra, és látnod kellene a webalkalmazást.
 
 ## **_Mobil_**
 
