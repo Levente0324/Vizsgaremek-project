@@ -48,8 +48,9 @@ Először is klónozd le a repót a gépedre aztán nyisd meg: <strong>`git clon
   npm install
   ```
 
-  Hozz létre egy `.env` fájlt a _back_ mappában és indítsd el a MySQL adatbázisod (XAMPP). Csinálj egy <strong>_rentcar_</strong> nevű adatbázist és hagyd üresen. <br>
-  Írd bele a `.env` fájlba a kapcsolat URL-t, például: <strong>_DATABASE_URL="mysql://root@localhost:3306/rentcar"_</strong>
+  Hozz létre egy `.env` fájlt a _back_ mappában és indítsd el a MySQL adatbázisod (XAMPP). <br>
+  Csinálj egy <strong>_rentcar_</strong> nevű adatbázist és hagyd üresen. <br>
+  Írd bele a `.env` fájlba a kapcsolat URL-t, például: <strong>_`DATABASE_URL="mysql://root@localhost:3306/rentcar"`_</strong>
 
 - Generáld le a Prisma klienst
   ```sh
