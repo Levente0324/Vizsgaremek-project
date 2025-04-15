@@ -113,8 +113,6 @@ Kövesd az alábbi lépéseket a mobil app futtatásához:
    flutter run
    ```
 
-<br>
-
 ---
 
 ### _Támogatott platformok_
