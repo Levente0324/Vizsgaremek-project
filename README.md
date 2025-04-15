@@ -1,5 +1,7 @@
 <div align="center">
-<strong>🌐 Vizsgaremek Projekt 🌐</strong>
+
+# **🌐 Vizsgaremek Projekt 🌐**
+
 </div>
 
 # ❗Fontos tudnivalók
