@@ -114,6 +114,16 @@ Kövesd az alábbi lépéseket a mobil app futtatásához:
    flutter run
    ```
 
+## **_Admin felület elérése_**
+
+A seed-elés után az adatbázisban autómatikusan létre lesz hozva egy admin fiók, ahova az alábbi email és jelszóval tudsz belépni: <br>
+
+#### **email:** _admin@example.com_
+
+#### **jelszo:** _adminpass_
+
+Ezek után fent a navbar-ban a fiók ikon mellet meg kell jelennie az **_Admin Page_** button-nek, amivel el tudsz jutni az admin felülethez.
+
 ---
 
 ### _Támogatott platformok_
