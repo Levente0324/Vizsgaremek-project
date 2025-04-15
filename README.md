@@ -1,4 +1,4 @@
-<h1 align="center">🌐 Vizsgaremek Projekt 🌐</h1>
+<h1 align="center"><strong>🌐 Vizsgaremek Projekt 🌐</strong></h1>
 
 # ❗Fontos tudnivalók
 
@@ -6,7 +6,7 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 
 # 💻 Használt technológiák
 
-### _Web_
+### **Web**
 
 - ![Next JS](https://img.shields.io/badge/NextJS-4c4c4d?style=for-the-badge&logo=next.js&logoColor=white)
 - ![Nest JS](https://img.shields.io/badge/NestJS-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
@@ -14,14 +14,12 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 - ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 - ![TailwindCSS](https://img.shields.io/badge/tailwindcss-690000.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-### _Mobil_
+### **Mobil**
 
 - ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 - ![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
-- ![HTTP](https://img.shields.io/badge/HTTP-Package-blue?style=for-the-badge)
-- ![SharedPreferences](https://img.shields.io/badge/Shared_Preferences-Storage-green?style=for-the-badge)
 
-# Előfeltételek
+# 📦 Előfeltételek
 
 - Node.js (v20.x vagy újabb)
 - MySQL (8.0 vagy újabb)
@@ -32,11 +30,9 @@ Ez a projekt egy autóbérlő webalkalmazás, amelyet csapatban fejlesztettünk.
 
 # 🔎 Hogyan indítsd el
 
-## _Web_
+## Web
 
-Kövesd az alábbi lépéseket ahhoz, hogy el tudd indítani a projektet:
-
-### _Backend_
+## _Backend_
 
 - Lépj be a backend mappába
   ```sh
@@ -71,7 +67,7 @@ Kövesd az alábbi lépéseket ahhoz, hogy el tudd indítani a projektet:
   npm run start:debug
   ```
 
-### _Frontend_
+## _Frontend_
 
 Nyiss meg egy új _terminál_-t (A _backend_-et hagyd futni a háttérbe)
 
@@ -91,8 +87,6 @@ Nyiss meg egy új _terminál_-t (A _backend_-et hagyd futni a háttérbe)
 <br>
 
 Ha fut a _Backend_ és a _Frontend_ is, akkor menj fel a <strong>_[https://localhost:8080](https://localhost:8080)_</strong> oldalra, és látnod kellene a webalkalmazást.
-
-<br>
 
 ## _Mobil_
 
@@ -115,11 +109,8 @@ Kövesd az alábbi lépéseket a mobil app futtatásához:
    flutter run
    ```
 
-### Támogatott platformok
+### _Támogatott platformok_
 
-- Android
-- iOS
-- Linux
-- Windows
-- macOS
+- Android/iOS
+- Windows/macOS/Linux
 - Web
