@@ -1,4 +1,6 @@
-<h1 style="text-align:center; font-size:300%; ">🌐 Vizsgaremek Projekt 🌐</h1>
+<div align="center">
+<h1><b>🌐 Vizsgaremek Projekt 🌐</b></h1>
+</div>
 
 # ❗Fontos tudnivalók
 
